@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>eazyBookmark2</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.playframework.playclipse.playNature</nature>
+	</natures>
+	<linkedResources><link><name>secure</name><type>2</type><location>/opt/play-1.2/modules/secure/app</location></link>
+<link><name>conf/secure</name><type>2</type><location>/opt/play-1.2/modules/secure/conf</location></link>
+<link><name>public/secure</name><type>2</type><location>/opt/play-1.2/modules/secure/public</location></link>
+<link><name>crudsiena-2.0.2</name><type>2</type><location>/Users/Hossam_Amer/7@S7@S Works/9th semester/Mobile/workspace/SheelMaayaaServer/modules/crudsiena-2.0.2/app</location></link>
+<link><name>conf/crudsiena-2.0.2</name><type>2</type><location>/Users/Hossam_Amer/7@S7@S Works/9th semester/Mobile/workspace/SheelMaayaaServer/modules/crudsiena-2.0.2/conf</location></link>
+<link><name>public/crudsiena-2.0.2</name><type>2</type><location>/Users/Hossam_Amer/7@S7@S Works/9th semester/Mobile/workspace/SheelMaayaaServer/modules/crudsiena-2.0.2/public</location></link>
+<link><name>gae-1.4</name><type>2</type><location>/opt/play-1.2/modules/gae-1.4/app</location></link>
+<link><name>siena-2.0.5</name><type>2</type><location>/opt/play-1.2/modules/siena-2.0.5/app</location></link>
+<link><name>conf/siena-2.0.5</name><type>2</type><location>/opt/play-1.2/modules/siena-2.0.5/conf</location></link>
+</linkedResources>
+</projectDescription>
