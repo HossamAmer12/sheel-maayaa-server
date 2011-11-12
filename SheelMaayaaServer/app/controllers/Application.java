@@ -9,6 +9,14 @@ import models.*;
 
 public class Application extends Controller {
 
+	
+	public static String test(){
+		
+		return "Test successful";
+		
+	}
+	
+	
     public static void index() {
         
     	User bob = new User("bob", "as", 
