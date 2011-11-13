@@ -5,11 +5,13 @@
 # Home page
 GET     /                                     				    Application.index
 GET     /test													Application.test
-GET     /insertflight/flight											Application.insertFlight
+GET     /insertflight/flight									Application.insertFlight
 GET     /insertoffer											Application.insertOffer
 GET		/getflightoffers/{id}									Application.getFlightOffers
 GET		/getFlightByFlightNumber/{flightNumber}					Application.getFlightbyFlightNumber
+GET 	/getOffersByFlightNumber/{flightNumber}					Application.getOffersByFlightNumber
 GET     /insertConfirmation											Application.insertConfirmation
+
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
