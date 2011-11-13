@@ -22,6 +22,7 @@ import siena.Table;
 public class User extends Model
 {
 		//@Id(Generator.AUTO_INCREMENT)
+		@Id
 		public Long id;
 
 		
