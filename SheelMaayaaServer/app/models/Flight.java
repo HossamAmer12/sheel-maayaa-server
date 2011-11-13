@@ -5,13 +5,19 @@ import java.util.ArrayList;
 import siena.Column;
 import siena.DateTime;
 import siena.Filter;
+import siena.Generator;
+import siena.Id;
 import siena.Model;
 import siena.Query;
 import siena.Table;
+import java.util.Date;
 
 @Table("Flight")
 public class Flight extends Model
 {
+	
+		@Id(Generator.AUTO_INCREMENT)
+		public Long id;
 		@Column("fligh_number")
 	  	public String flightNumber;
 		@Column("source")
@@ -21,7 +27,7 @@ public class Flight extends Model
 	    public String destination;
 		
 		@Column("departure_date_time")
-	    public DateTime departureDateTime;  //holds both the date and the time of the departure
+	    public Date departureDateTime;  //holds both the date and the time of the departure
 	    									//XXXChanged into DateTime!! -> Hossam Amer
 
 	 //   @OneToMany(mappedBy = "flight")
@@ -31,7 +37,7 @@ public class Flight extends Model
 	    public Query <Offer> offers;
 	    
 	    //XXXXTake care the constructor is without offers!!
-	    public Flight(String flightNumber, String source, String destination, DateTime departureDateTime) {
+	    public Flight(String flightNumber, String source, String destination, Date departureDateTime) {
 	        this.flightNumber = flightNumber;
 	        this.source = source;
 	        this.destination = destination;
@@ -40,11 +46,11 @@ public class Flight extends Model
 	    }
 	    
 	    
-	    public DateTime getDepartureDateTime() {
+	    public Date getDepartureDateTime() {
 	        return departureDateTime;
 	    }
 
-	    public void setDepartureDateTime(DateTime departureDateTime) {
+	    public void setDepartureDateTime(Date departureDateTime) {
 	        this.departureDateTime = departureDateTime;
 	    }
 
@@ -83,6 +89,7 @@ public class Flight extends Model
 //	    }
 
 	    //XXX I am not sure yet!!!
+	    /*
 	    public ArrayList<Offer> getOffers(String flighNumber) {
 	    	ArrayList <Offer> x = new ArrayList <Offer> ();
 	    	Flight y = Model.getByKey(Flight.class, flighNumber);
@@ -91,6 +98,6 @@ public class Flight extends Model
 	    	
 			return x;
 	    }
-	    
+	    */
 	    
 }
