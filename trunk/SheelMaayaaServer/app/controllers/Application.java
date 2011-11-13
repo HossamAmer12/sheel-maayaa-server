@@ -85,6 +85,8 @@ public class Application extends Controller {
 			}
 	}
 	
+	
+	
     public static void index() {
         
     	User bob = new User((long)(Math.random()*10000),"balalaika", 
@@ -97,5 +99,40 @@ public class Application extends Controller {
     	
     	renderJSON (hashas);
     }
+    
+    /**
+     * @author Hossam Amer
+     * Creates a confirmation inside the database.
+     */
+    
+    public static String insertConfirmation(){
+		
+    	try
+    	{
+			User hashas = User.all(User.class).get();
+			User hashas2 = User.all(User.class).get();
+			Offer x = Offer.all(Offer.class).get();
+			
+			Confirmation confirmation = new Confirmation (x,
+									hashas,
+									hashas2,
+									true,
+									false,
+									true,
+									false);
+			
+	
+			confirmation.insert();
+			return "Success";
+		 }
+    	
+    	catch(Exception e)
+    	{
+			return e.toString();
+		}
+	}
+	
+	
+    
 
 }

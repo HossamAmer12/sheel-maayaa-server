@@ -6,7 +6,9 @@ import siena.*;
 @Table("Confirmation")
 public class Confirmation extends Model
 {
-
+		@Id
+		public Long Id;
+	
 		@Column ("offer")
     	public Offer offer;
 
