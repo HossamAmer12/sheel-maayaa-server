@@ -39,8 +39,8 @@ public class Offer extends Model
 	@Column("user")
     public User user; //offer Creator
   
-	@Column("confirmation")
-	public Confirmation confirmation;
+//	@Column("confirmation")
+//	public Confirmation confirmation;
     
     
     //public String currency; //Will be done next sprint
@@ -117,12 +117,19 @@ public class Offer extends Model
 //        this.confirmation = confirmation;
 //    }
 //
-//    public Flight getFlight() {
-//        return flight;
-//    }
+    public Flight getFlight() {
+        return flight;
+    }
 //
-//    public void setFlight(Flight flight) {
-//        this.flight = flight;
-//    }
+    public void setFlight(Flight flight) {
+        this.flight = flight;
+    }
+
+	@Override
+	public String toString() {
+		return "Offer [id=" + id + ", pricePerKilogram=" + pricePerKilogram
+				+ ", noOfKilograms=" + noOfKilograms + ", userStatus="
+				+ userStatus + ", offerStatus=" + offerStatus + "]";
+	}
 	
 }// end offer class

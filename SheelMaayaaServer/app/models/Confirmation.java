@@ -6,15 +6,7 @@ import siena.*;
 @Table("Confirmation")
 public class Confirmation extends Model
 {
-//	  	@OneToOne
-//	    public Offer offer;
-//	    @OneToOne
-//	    public User user1;
-//	    @OneToOne
-//	    public User user2;
-// 
-		
-		
+
 		@Column ("offer")
     	public Offer offer;
 
@@ -24,22 +16,32 @@ public class Confirmation extends Model
     	@Column ("user2")
     	public User user2;
 		
-	
-	    public String statusTransactionUser1; //indicates the user confirmed the transaction
-	    public String statusTransactionUser2;
-
-	    public String statusDeliveryUser1;
-	    public String statusDeliveryUser2;
+		/**
+		 * Indicates User confirmed first exchange of luggange
+		 */
+	    public boolean statusTransactionUser1; 
+	    /**
+		 * Indicates User confirmed first exchange of luggange
+		 */
+	    public boolean statusTransactionUser2;
+	    /**
+  		 * Indicates User confirmed second exchange of luggange
+  		 */
+	    public boolean statusDeliveryUser1;   
+	    /**
+  		 * Indicates User confirmed second exchange of luggange
+  		 */
+	    public boolean statusDeliveryUser2;
 	    
 	    
 	    public Confirmation(
 	    		Offer offer,
 	            User user1,
 	            User user2,
-	            String statusTransactionUser1,
-	            String statusTransactionUser2,
-	            String statusDeliveryUser1,
-	            String statusDeliveryUser2) {
+	            boolean statusTransactionUser1,
+	            boolean statusTransactionUser2,
+	            boolean statusDeliveryUser1,
+	            boolean statusDeliveryUser2) {
 	        
 	        this.offer = offer;
 	        this.user1 = user1;
@@ -58,35 +60,35 @@ public class Confirmation extends Model
 	        this.offer = offer;
 	    }
 
-	    public String getStatusDeliveryUser1() {
+	    public boolean getStatusDeliveryUser1() {
 	        return statusDeliveryUser1;
 	    }
 
-	    public void setStatusDeliveryUser1(String statusDeliveryUser1) {
+	    public void setStatusDeliveryUser1(boolean statusDeliveryUser1) {
 	        this.statusDeliveryUser1 = statusDeliveryUser1;
 	    }
 
-	    public String getStatusDeliveryUser2() {
+	    public boolean getStatusDeliveryUser2() {
 	        return statusDeliveryUser2;
 	    }
 
-	    public void setStatusDeliveryUser2(String statusDeliveryUser2) {
+	    public void setStatusDeliveryUser2(boolean statusDeliveryUser2) {
 	        this.statusDeliveryUser2 = statusDeliveryUser2;
 	    }
 
-	    public String getStatusTransactionUser1() {
+	    public boolean getStatusTransactionUser1() {
 	        return statusTransactionUser1;
 	    }
 
-	    public void setStatusTransactionUser1(String statusTransactionUser1) {
+	    public void setStatusTransactionUser1(boolean statusTransactionUser1) {
 	        this.statusTransactionUser1 = statusTransactionUser1;
 	    }
 
-	    public String getStatusTransactionUser2() {
+	    public boolean getStatusTransactionUser2() {
 	        return statusTransactionUser2;
 	    }
 
-	    public void setStatusTransactionUser2(String statusTransactionUser2) {
+	    public void setStatusTransactionUser2(boolean statusTransactionUser2) {
 	        this.statusTransactionUser2 = statusTransactionUser2;
 	    }
 

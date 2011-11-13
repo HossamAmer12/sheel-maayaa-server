@@ -12,13 +12,16 @@ import siena.Query;
 import siena.Table;
 import java.util.Date;
 
+import ClientModels.CFlight;
+
 @Table("Flight")
 public class Flight extends Model
 {
 	
 		@Id(Generator.AUTO_INCREMENT)
 		public Long id;
-		@Column("fligh_number")
+		
+		@Column("flight_number")
 	  	public String flightNumber;
 		@Column("source")
 	    public String source;
@@ -27,8 +30,7 @@ public class Flight extends Model
 	    public String destination;
 		
 		@Column("departure_date_time")
-	    public Date departureDateTime;  //holds both the date and the time of the departure
-	    									//XXXChanged into DateTime!! -> Hossam Amer
+	    public Date departureDateTime;   //Use java.util.Date, it works. Don't use Siena DateTime, its an annotation, not an object.
 
 	 //   @OneToMany(mappedBy = "flight")
 	 //   public List<Offer> offers;
@@ -36,7 +38,15 @@ public class Flight extends Model
 	    @Filter("flight")
 	    public Query <Offer> offers;
 	    
-	    //XXXXTake care the constructor is without offers!!
+	    
+	    public Flight(CFlight flight) {
+	        this.flightNumber = flight.flightNumber;
+	        this.source = flight.source;
+	        this.destination = flight.destination;
+	        this.departureDateTime = flight.departureDateTime;
+	        
+	    }
+	    
 	    public Flight(String flightNumber, String source, String destination, Date departureDateTime) {
 	        this.flightNumber = flightNumber;
 	        this.source = source;
@@ -78,15 +88,22 @@ public class Flight extends Model
 	        this.source = source;
 	    }
 
-	    
-//XXX problem not solved!	    
-//	    public List<Offer> getOffers() {
-//	        return offers;
-//	    }
-//
-//	    public void setOffers(List<Offer> offers) {
-//	        this.offers = offers;
-//	    }
+	        
+	    public Query<Offer> getOffers() {
+	        return offers;
+	    }
+
+	    public void setOffers(Query<Offer> offers) {
+	        this.offers = offers;
+	    }
+
+
+		@Override
+		public String toString() {
+			return "Flight [id=" + id + ", flightNumber=" + flightNumber
+					+ ", source=" + source + ", destination=" + destination
+					+ ", departureDateTime=" + departureDateTime + "]";
+		}
 
 	    //XXX I am not sure yet!!!
 	    /*
