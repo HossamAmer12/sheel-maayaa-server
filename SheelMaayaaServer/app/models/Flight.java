@@ -38,14 +38,14 @@ public class Flight extends Model
 	    @Filter("flight")
 	    public Query <Offer> offers;
 	    
-	    
+	    /*
 	    public Flight(CFlight flight) {
 	        this.flightNumber = flight.flightNumber;
 	        this.source = flight.source;
 	        this.destination = flight.destination;
 	        this.departureDateTime = flight.departureDateTime;
 	        
-	    }
+	    }*/
 	    
 	    public Flight(String flightNumber, String source, String destination, Date departureDateTime) {
 	        this.flightNumber = flightNumber;
