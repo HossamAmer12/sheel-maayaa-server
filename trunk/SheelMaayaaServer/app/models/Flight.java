@@ -12,7 +12,7 @@ import siena.Query;
 import siena.Table;
 import java.util.Date;
 
-import ClientModels.CFlight;
+//import ClientModels.CFlight;
 
 @Table("Flight")
 public class Flight extends Model
