@@ -21,13 +21,14 @@ import siena.Table;
 @Table("User")
 public class User extends Model
 {
-		@Id(Generator.AUTO_INCREMENT)
+		//@Id(Generator.AUTO_INCREMENT)
 		public Long id;
 
-		@Column("username")
+		
+		@Column("username")  
 	 	public String username;
-		@Column("password")
-	    public String password;
+		//@Column("password")  //remove password
+	    //public String password;
 
 		@Column("first_name")
 	    public String firstName;
@@ -57,16 +58,10 @@ public class User extends Model
 	    
 	    @Filter("user2")
 	    public Query <Confirmation> confirmations2;
-
 	    
-//	    @Owned(mappedBy = "user")
-//	    public Many<Offer> offers;
-	    
-//	    @OneToMany(mappedBy = "user")
-//	    public List<Offer> offers;
-	    
-	    public User(String username, 
-	            String password,
+	    public User(
+	    		long id,
+	    		String username, 
 	            String firstName,
 	            String middleName,
 	            String lastName,
@@ -75,9 +70,8 @@ public class User extends Model
 	            String email,
 	            String mobileNumber,
 	            String facebookAccount) {
-	        
+	        this.id = id;
 	        this.username = username;
-	        this.password = password;
 	        this.firstName = firstName;
 	        this.middleName = middleName;
 	        this.lastName = lastName;
@@ -87,8 +81,6 @@ public class User extends Model
 	        this.mobileNumber = mobileNumber;
 	        this.facebookAccount = facebookAccount;
 
-//XXX	        
-//	        this.offers = new ArrayList<Offer>();
 	    }
 	    
 	    public Query <User> all()
@@ -101,7 +93,6 @@ public class User extends Model
 	    	return
 	    	 "ID: " + id +
 	    	", Username: " + username + 
-	    	", Password: " + password + 
 	    	", First Name: " + firstName +
 	    	", Middle Name: " + middleName +
 	    	", Last Name: " + lastName +
