@@ -8,14 +8,14 @@
 GET     /                                     				    Application.index
 POST    /insertflight/											Application.insertFlight(flight)
 GET     /test													Application.test
-GET		/getFlightByFlightNumber/{flightNumber}					Application.getFlightbyFlightNumber
+GET		/getflightByflightnumber/{flightNumber}					Application.getFlightbyFlightNumber
 GET     /insertConfirmation										Application.insertConfirmation
 GET 	/getflightbyairports/{source}/{destination}				Application.getFlightByAirports
 
 GET     /insertoffer											Offers.insertOffer
 GET		/getflightoffers/{id}									Offers.getFlightOffers
-GET 	/getOffersByFlightNumber/{flightNumber}					Offers.getOffersByFlightNumber
-GET 	/getOffersByAirports/{source}/{destination}				Offers.getOffersByAirports
+GET 	/getoffersbyflightnumber/{flightNumber}					Offers.getOffersByFlightNumber
+GET 	/getoffersbyairports/{source}/{destination}				Offers.getOffersByAirports
 
 
 # Ignore favicon requests
