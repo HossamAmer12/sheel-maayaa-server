@@ -59,11 +59,10 @@ public class Offers extends Controller {
 		}
 	}
 	
-	public static String getOffersByAirports(String sourceAirport, String destAirport){
+	public static String getOffersByAirports(String source, String destination){
 		
 		try{
-			Flight flight = Flight.all(Flight.class).filter("source", sourceAirport).filter("destination", destAirport).get();
-			
+			Flight flight = Flight.all(Flight.class).search(source, "source").search(destination, "destination").get();
 			String offerString = "";
 			List<Offer>offers =  flight.offers.fetch();
 			for(int i = 0; i<flight.offers.count();i++)
