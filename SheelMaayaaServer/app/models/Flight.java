@@ -96,6 +96,11 @@ public class Flight extends Model
 	    public void setOffers(Query<Offer> offers) {
 	        this.offers = offers;
 	    }
+	    
+	    public Query <Flight> all()
+	    {
+	    	return Model.all(Flight.class);
+	    }
 
 
 		@Override
