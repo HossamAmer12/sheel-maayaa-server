@@ -8,6 +8,7 @@ GET     /test													Application.test
 GET     /insertflight/flight									Application.insertFlight
 GET		/getFlightByFlightNumber/{flightNumber}					Application.getFlightbyFlightNumber
 GET     /insertConfirmation										Application.insertConfirmation
+GET 	/getFlightByAirports/{source}/{destination}				Application.getFlightByAirports
 
 GET     /insertoffer											Offers.insertOffer
 GET		/getflightoffers/{id}									Offers.getFlightOffers
