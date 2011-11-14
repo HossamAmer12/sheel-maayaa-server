@@ -2,10 +2,11 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+POST    /insertflight/											Application.insertFlight
+
 # Home page
 GET     /                                     				    Application.index
 GET     /test													Application.test
-GET     /insertflight/flight									Application.insertFlight
 GET		/getFlightByFlightNumber/{flightNumber}					Application.getFlightbyFlightNumber
 GET     /insertConfirmation										Application.insertConfirmation
 GET 	/getFlightByAirports/{source}/{destination}				Application.getFlightByAirports
