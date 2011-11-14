@@ -12,7 +12,7 @@ GET     /insertConfirmation										Application.insertConfirmation
 GET     /insertoffer											Offers.insertOffer
 GET		/getflightoffers/{id}									Offers.getFlightOffers
 GET 	/getOffersByFlightNumber/{flightNumber}					Offers.getOffersByFlightNumber
-GET 	/ getOffersByAirports/{source}/{destination}			Offers. getOffersByAirports
+GET 	/getOffersByAirports/{source}/{destination}				Offers. getOffersByAirports
 
 
 # Ignore favicon requests
