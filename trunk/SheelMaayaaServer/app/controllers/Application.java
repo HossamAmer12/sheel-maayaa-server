@@ -35,6 +35,7 @@ public class Application extends Controller {
 		
 		try{
 			Flight flight = Flight.all(Flight.class).search(flightNumber, "flightNumber").fetch().get(0);
+			
 	 		return flight.toString();
 		}catch(Exception e){
 			return e.toString();
@@ -42,6 +43,17 @@ public class Application extends Controller {
 		
 	}
 	
+	public static String getFlightByAirports(String sourceAirport, String destAirport){
+		
+		try{
+			Flight flight = Flight.all(Flight.class).filter("source", sourceAirport).filter("destination", destAirport).get();
+			
+	 		return flight.toString();
+		}catch(Exception e){
+			return e.toString();
+		}
+		
+	}
 
 	public static String insertFlight(){
 		try{
