@@ -21,7 +21,7 @@ public class Offer extends Model
     public String noOfKilograms;
 
 	@Column("user_status")
-    public String userStatus;  //Excess weight or Less weight
+    public boolean userStatus;  //Excess weight or Less weight
 	@Column("offer_status")
     public String offerStatus; //Open or taken or expired . . .
      //I suggest we make integer codes for these status -> Ahmed Mohsen
@@ -48,7 +48,7 @@ public class Offer extends Model
     public Offer(User user, Flight flight,
             String pricePerKilogram,
             String noOfKilograms,
-            String userStatus,
+            boolean userStatus,
             String offerStatus) 
     {
         
@@ -94,11 +94,11 @@ public class Offer extends Model
         this.pricePerKilogram = pricePerKilogram;
     }
 
-    public String getUserStatus() {
+    public boolean getUserStatus() {
         return userStatus;
     }
 
-    public void setUserStatus(String userStatus) {
+    public void setUserStatus(boolean userStatus) {
         this.userStatus = userStatus;
     }
     
