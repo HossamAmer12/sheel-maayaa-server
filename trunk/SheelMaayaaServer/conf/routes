@@ -6,16 +6,18 @@
 
 # Home page
 GET     /                                     				    Application.index
-POST    /insertflight/											Application.insertFlight(flight)
+POST    /insertflight/										Application.insertFlight(flight)
 GET     /test													Application.test
-GET		/getflightByflightnumber/{flightNumber}					Application.getFlightbyFlightNumber
 GET     /insertConfirmation										Application.insertConfirmation
-GET 	/getflightbyairports/{source}/{destination}				Application.getFlightByAirports
 
-GET     /insertoffer											Offers.insertOffer
-GET		/getflightoffers/{id}									Offers.getFlightOffers
-GET 	/getoffersbyflightnumber/{flightNumber}					Offers.getOffersByFlightNumber
-GET 	/getoffersbyairports/{source}/{destination}				Offers.getOffersByAirports
+GET     /insertoffer/{userId}/{flightId}/{kgs}/{price}/{userStatus}/					Offers.insertOffer
+GET		/getflightoffers/{id}															Offers.getFlightOffers
+GET 	/getoffersbyflightnumber/{flightNumber}/{userStatus}/{date}						Offers.getOffersByFlightNumber
+GET 	/getoffersbyairports/{source}/{destination}/{userStatus}/{date} 				Offers.getOffersByAirports
+
+GET 	/insertflight/{flightNumber}/{source}/{destination}/{departureDate}				Flights.insertFlight
+
+GET		/insertuser/{username}/{gender}/{nationality}									Users.insertUser
 
 
 # Ignore favicon requests
