@@ -11,6 +11,11 @@ import models.*;
 
 public class Offers extends Controller {
 	
+	/*
+	 * 
+	// Gives compile error
+	// @ whoever did this, DONT CHANGE KGS AND PRICE TO STRINGS.
+	// Parse them, then add to the db. Mama mia!
 	public static String insertOffer(long userId, long flightId, String kgs, 
 									String price, boolean userStatus){
 		try{
@@ -23,7 +28,7 @@ public class Offers extends Controller {
 			}catch(Exception e){
 			return e.toString();
 			}
-	}
+	}*/
 	
 	public static String getFlightOffers(long id){
 		try{
