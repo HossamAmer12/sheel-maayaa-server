@@ -10,7 +10,7 @@ POST    /insertflight/										Application.insertFlight(flight)
 GET     /test													Application.test
 GET     /insertConfirmation										Application.insertConfirmation
 
-GET     /insertoffer/{userId}/{flightId}/{kgs}/{price}/{userStatus}/					Offers.insertOffer
+GET     /insertoffer/{userId}/{flightId}/{kgs}/{price}/{userStatus}						Offers.insertOffer
 GET		/getflightoffers/{id}															Offers.getFlightOffers
 GET 	/getoffersbyflightnumber/{flightNumber}/{userStatus}/{date}						Offers.getOffersByFlightNumber
 GET 	/getoffersbyairports/{source}/{destination}/{userStatus}/{date} 				Offers.getOffersByAirports
