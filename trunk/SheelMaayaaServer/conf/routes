@@ -12,8 +12,10 @@ GET     /insertConfirmation										Application.insertConfirmation
 
 GET     /insertoffer/{userId}/{flightId}/{kgs}/{price}/{userStatus}						Offers.insertOffer
 GET		/getflightoffers/{id}															Offers.getFlightOffers
-GET 	/getoffersbyflightnumber/{flightNumber}/{userStatus}/{date}						Offers.getOffersByFlightNumber
-GET 	/getoffersbyairports/{source}/{destination}/{userStatus}/{date} 				Offers.getOffersByAirports
+GET 	/getoffersbyflightnumber/{flightNumber}/{date}/{userStatus}						Offers.getOffersByFlightNumber
+GET 	/getoffersbyairports/{source}/{destination}/{date}/{userStatus} 				Offers.getOffersByAirports
+GET		/filterflightnumberoffers/{flightNumber}/{date}/{userStatus}/{kgs}/{price}/{gender}/{nationality} Offers.filterFlightNumberOffers
+GET		/filterairportsoffers/{source}/{destination}/{date}/{userStatus}/{kgs}/{price}/{gender}/{nationality} Offers.filterAirportsOffers
 
 GET 	/insertflight/{flightNumber}/{source}/{destination}/{departureDate}				Flights.insertFlight
 
