@@ -17,24 +17,38 @@ public class Confirmations extends Controller {
      * Creates a confirmation inside the database.
      */
     
-    public static String insertConfirmation(){
+    public static String insertConfirmation(long userId, long offerId, int user_status){
 		
     	try
     	{
-			User hashas = User.all(User.class).get();
-			User hashas2 = User.all(User.class).get();
-			Offer x = Offer.all(Offer.class).get();
-			
-			Confirmation confirmation = new Confirmation (x,
-									hashas,
-									hashas2,
-									true,
-									false,
-									true,
-									false);
-			
-	
-			confirmation.insert();
+    		User user = User.getByKey(User.class, userId);
+    		Offer offer = Offer.getByKey(Offer.class, offerId);
+    		
+    		if (user_status == 1)
+    		{
+    			try {
+    				
+//    				Confirmation confirmation = 
+    					Confirmation.all(Confirmation.class).filter("user1", user).
+    				filter("offer", offer).fetch().get(0);
+    				
+    				return "There is already a confirmation from this user";
+    				
+				} catch (NullPointerException e) {
+					// TODO: handle exception
+					
+					new Confirmation(offer, user, null, true, false, false, false).insert();
+					return "This confirmation is fresh!";
+				}
+    				
+    		}
+    		
+    		else
+    			new Confirmation(offer, user, null, false, true, false, false).insert();
+    	
+    		
+    		
+    		
 			return "Success";
 		 }
     	
