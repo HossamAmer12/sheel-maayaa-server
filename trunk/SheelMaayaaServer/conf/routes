@@ -5,21 +5,21 @@
 
 
 # Home page
-GET     /                                     				    Application.index
-POST    /insertflight/										Application.insertFlight(flight)
-GET     /test													Application.test
-GET     /insertconfirmation										Confirmations.insertConfirmation
+GET     /                                     				    										  	  Application.index
+POST    /insertflight/																						  Application.insertFlight(flight)
+GET     /test																								  Application.test
+GET     /insertconfirmation/{userId}/{offerId}/{user_status}											  	  Confirmations.insertConfirmation
 
-GET     /insertoffer/{userId}/{flightId}/{kgs}/{price}/{userStatus}						Offers.insertOffer
-GET		/getflightoffers/{id}															Offers.getFlightOffers
-GET 	/getoffersbyflightnumber/{flightNumber}/{date}/{userStatus}						Offers.getOffersByFlightNumber
-GET 	/getoffersbyairports/{source}/{destination}/{date}/{userStatus} 				Offers.getOffersByAirports
-GET		/filterflightnumberoffers/{flightNumber}/{date}/{userStatus}/{kgs}/{price}/{gender}/{nationality} Offers.filterFlightNumberOffers
+GET     /insertoffer/{userId}/{flightId}/{kgs}/{price}/{userStatus}										      Offers.insertOffer
+GET		/getflightoffers/{id}																		          Offers.getFlightOffers
+GET 	/getoffersbyflightnumber/{flightNumber}/{date}/{userStatus}										      Offers.getOffersByFlightNumber
+GET 	/getoffersbyairports/{source}/{destination}/{date}/{userStatus} 								      Offers.getOffersByAirports
+GET		/filterflightnumberoffers/{flightNumber}/{date}/{userStatus}/{kgs}/{price}/{gender}/{nationality}     Offers.filterFlightNumberOffers
 GET		/filterairportsoffers/{source}/{destination}/{date}/{userStatus}/{kgs}/{price}/{gender}/{nationality} Offers.filterAirportsOffers
 
-GET 	/insertflight/{flightNumber}/{source}/{destination}/{departureDate}				Flights.insertFlight
+GET 	/insertflight/{flightNumber}/{source}/{destination}/{departureDate}									  Flights.insertFlight
 
-GET		/insertuser/{username}/{gender}/{nationality}									Users.insertUser
+GET		/insertuser/{username}/{gender}/{nationality}														  Users.insertUser
 
 
 # Ignore favicon requests
