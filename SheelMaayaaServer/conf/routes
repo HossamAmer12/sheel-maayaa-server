@@ -22,6 +22,8 @@ GET 	/insertflight/{flightNumber}/{source}/{destination}/{departureDate}								
 			
  GET		/insertuser/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nationality}/{passportNumber}/{gender}								Users.insertUser
 
+GET 	/testing/{gender}/{nationality} 	Offers.testing
+
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
