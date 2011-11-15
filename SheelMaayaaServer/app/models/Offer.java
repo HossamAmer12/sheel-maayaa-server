@@ -16,12 +16,12 @@ public class Offer extends Model
 
 	
 	@Column("price_per_kilogram")
-	public String pricePerKilogram;
+	public int pricePerKilogram;
 	@Column("no_of_kilograms")
-    public String noOfKilograms;
+    public int noOfKilograms;
 
 	@Column("user_status")
-    public boolean userStatus;  //Excess weight or Less weight
+    public int userStatus;  //1 for Extra weight and 0 for Less weight
 	@Column("offer_status")
     public String offerStatus; //Open or taken or expired . . .
      //I suggest we make integer codes for these status -> Ahmed Mohsen
@@ -46,14 +46,13 @@ public class Offer extends Model
     //public String currency; //Will be done next sprint
     
     public Offer(User user, Flight flight,
-            String pricePerKilogram,
-            String noOfKilograms,
-            boolean userStatus,
+    		int noOfKilograms,
+            int pricePerKilogram,
+            int userStatus,
             String offerStatus) 
     {
-        
+    	this.noOfKilograms = noOfKilograms;
         this.pricePerKilogram = pricePerKilogram;
-        this.noOfKilograms = noOfKilograms;
         this.userStatus = userStatus;
         this.offerStatus = offerStatus;
         this.user = user;
@@ -70,11 +69,11 @@ public class Offer extends Model
 
     
 
-    public String getNoOfKilograms() {
+    public int getNoOfKilograms() {
         return noOfKilograms;
     }
 
-    public void setNoOfKilograms(String noOfKilograms) {
+    public void setNoOfKilograms(int noOfKilograms) {
         this.noOfKilograms = noOfKilograms;
     }
 
@@ -86,19 +85,19 @@ public class Offer extends Model
         this.offerStatus = offerStatus;
     }
 
-    public String getPricePerKilogram() {
+    public int getPricePerKilogram() {
         return pricePerKilogram;
     }
 
-    public void setPricePerKilogram(String pricePerKilogram) {
+    public void setPricePerKilogram(int pricePerKilogram) {
         this.pricePerKilogram = pricePerKilogram;
     }
 
-    public boolean getUserStatus() {
+    public int getUserStatus() {
         return userStatus;
     }
 
-    public void setUserStatus(boolean userStatus) {
+    public void setUserStatus(int userStatus) {
         this.userStatus = userStatus;
     }
     
@@ -127,9 +126,9 @@ public class Offer extends Model
 
 	@Override
 	public String toString() {
-		return "Offer [id=" + id + ", pricePerKilogram=" + pricePerKilogram
-				+ ", noOfKilograms=" + noOfKilograms + ", userStatus="
-				+ userStatus + ", offerStatus=" + offerStatus + "]";
+		return "Offer [id=" + id + ", noOfKilograms=" + noOfKilograms +
+				", pricePerKilogram=" + pricePerKilogram +
+				", userStatus=" + userStatus + ", offerStatus=" + offerStatus + "]";
 	}
 	
 }// end offer class
