@@ -16,9 +16,9 @@ public class Offer extends Model
 
 	
 	@Column("price_per_kilogram")
-	public float pricePerKilogram;
+	public String pricePerKilogram;
 	@Column("no_of_kilograms")
-    public float noOfKilograms;
+    public String noOfKilograms;
 
 	@Column("user_status")
     public String userStatus;  //Excess weight or Less weight
@@ -46,8 +46,8 @@ public class Offer extends Model
     //public String currency; //Will be done next sprint
     
     public Offer(User user, Flight flight,
-            float pricePerKilogram,
-            float noOfKilograms,
+            String pricePerKilogram,
+            String noOfKilograms,
             String userStatus,
             String offerStatus) 
     {
@@ -70,11 +70,11 @@ public class Offer extends Model
 
     
 
-    public float getNoOfKilograms() {
+    public String getNoOfKilograms() {
         return noOfKilograms;
     }
 
-    public void setNoOfKilograms(float noOfKilograms) {
+    public void setNoOfKilograms(String noOfKilograms) {
         this.noOfKilograms = noOfKilograms;
     }
 
@@ -86,11 +86,11 @@ public class Offer extends Model
         this.offerStatus = offerStatus;
     }
 
-    public float getPricePerKilogram() {
+    public String getPricePerKilogram() {
         return pricePerKilogram;
     }
 
-    public void setPricePerKilogram(float pricePerKilogram) {
+    public void setPricePerKilogram(String pricePerKilogram) {
         this.pricePerKilogram = pricePerKilogram;
     }
 
