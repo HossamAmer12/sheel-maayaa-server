@@ -12,12 +12,13 @@ import models.*;
 public class Offers extends Controller {
 
 	
-	public static String insertOffer(){
+	public static String insertOffer(long userId, long flightId, String kgs, 
+									String price, String userStatus){
 		try{
-			User hashas = User.all(User.class).get();
-			Flight flight = Flight.all(Flight.class).get();
+			User user = User.getByKey(User.class, userId);
+			Flight flight = Flight.getByKey(Flight.class, flightId);
 			
-			Offer offer = new Offer(hashas,flight,(float)10.0,(float)5.0,"Extra weight","NEW");
+			Offer offer = new Offer(user, flight, kgs, price, userStatus, "new");
 			offer.insert();
 			return "Success";
 			}catch(Exception e){
@@ -42,35 +43,56 @@ public class Offers extends Controller {
 	}
 
 
-	public static String getOffersByFlightNumber(String flightNumber){
+	public static String getOffersByFlightNumber(String flightNumber, String userStatus, String date){
 		
 		try{
-			Flight flight = Flight.all(Flight.class).filter("flightNumber", flightNumber).get();
 			
+			List<Flight>flights = Flight.all(Flight.class).filter("flightNumber", flightNumber)
+						.filter("departureDate", date).fetch();
+				
 			String offerString = "";
-			List<Offer>offers =  flight.offers.fetch();
-			for(int i = 0; i<flight.offers.count();i++)
+			
+			List<Offer>allOffers = new ArrayList<Offer>();
+			
+			for(int i = 0; i<flights.size();i++)
 			{
-				offerString +=  offers.get(i).toString();
+				allOffers.addAll(flights.get(i).offers.filter("userStatus", userStatus).fetch());	
+			}
+			
+			for(int i = 0; i<allOffers.size();i++)
+			{
+				offerString +=  allOffers.get(i).toString();
+				
 			}
 			return offerString;
+			
 		}catch(Exception e){
 			return e.toString();
 		}
 	}
 	
-	public static String getOffersByAirports(String source, String destination){
+	public static String getOffersByAirports(String source, String destination, String userStatus, String date){
 		
 		try{
-			Flight flight = Flight.all(Flight.class).filter("source", source).filter("destination", destination).get();
 			
+			List<Flight>flights = Flight.all(Flight.class).filter("source", source).
+						filter("destination", destination).filter("departureDate", date).fetch();
+				
 			String offerString = "";
-			List<Offer>offers =  flight.offers.fetch();
-			for(int i = 0; i<flight.offers.count();i++)
+			
+			List<Offer>allOffers = new ArrayList<Offer>();
+			
+			for(int i = 0; i<flights.size();i++)
 			{
-				offerString +=  offers.get(i).toString();
+				allOffers.addAll(flights.get(i).offers.filter("userStatus", userStatus).fetch());	
+			}
+			
+			for(int i = 0; i<allOffers.size();i++)
+			{
+				offerString +=  allOffers.get(i).toString();
 			}
 			return offerString;
+			
 		}catch(Exception e){
 			return e.toString();
 		}

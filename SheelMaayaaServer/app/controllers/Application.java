@@ -29,7 +29,7 @@ public class Application extends Controller {
 			return e.toString();
 		}
 		
-	}*/
+	}
 	
 	public static String getFlightByFlightNumber(String flightNumber){
 		
@@ -47,7 +47,7 @@ public class Application extends Controller {
 		
 		try{
 			Flight flight = Flight.all(Flight.class).search(source, "source").search(destination, "destination").get();
-			
+						
 	 		return flight.toString();
 		}catch(Exception e){
 			return e.toString();
@@ -57,20 +57,20 @@ public class Application extends Controller {
 
 	public static String insertFlight(){
 		try{
-		Date dt = new Date();
-		Flight f = new Flight("LH123", "Frankfurt", "Cairo", dt);
+			
+		Flight f = new Flight("LH123", "Frankfurt", "Cairo", "11-15-2011");
 		f.insert();
 		return "Success";
 		}catch(Exception e){
 		return e.toString();
 		}
-	}
+	}*/
 		
 	public static void index() {
         
-    	User bob = new User((long)(Math.random()*10000),"balalaika", 
+    	User bob = new User("balalaika", 
     			"aa", "", "", 
-    			"", "", "", "", "");
+    			"", "", "", "", "","","");
     	
     	bob.insert();
     	
