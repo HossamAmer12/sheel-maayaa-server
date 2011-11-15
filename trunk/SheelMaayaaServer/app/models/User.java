@@ -21,8 +21,8 @@ import siena.Table;
 @Table("User")
 public class User extends Model
 {
-		//@Id(Generator.AUTO_INCREMENT)
-		@Id
+		@Id(Generator.AUTO_INCREMENT)
+		//@Id
 		public Long id;
 
 		
@@ -50,6 +50,10 @@ public class User extends Model
 	    public String mobileNumber;
 		@Column("facebook_account")
 	    public String facebookAccount;
+		@Column("gender")
+		public String gender;
+		@Column("nationality")
+		public String nationality;
 	    
 	    @Filter("user")
 	    public Query <Offer> offers;
@@ -61,7 +65,6 @@ public class User extends Model
 	    public Query <Confirmation> confirmations2;
 	    
 	    public User(
-	    		long id,
 	    		String username, 
 	            String firstName,
 	            String middleName,
@@ -70,8 +73,9 @@ public class User extends Model
 	            String passportNumber,
 	            String email,
 	            String mobileNumber,
-	            String facebookAccount) {
-	        this.id = id;
+	            String facebookAccount,
+	            String gender,
+	            String nationality) {
 	        this.username = username;
 	        this.firstName = firstName;
 	        this.middleName = middleName;
@@ -81,6 +85,8 @@ public class User extends Model
 	        this.email = email;
 	        this.mobileNumber = mobileNumber;
 	        this.facebookAccount = facebookAccount;
+	        this.gender = gender;
+	        this.nationality = nationality;
 
 	    }
 	    
@@ -92,8 +98,7 @@ public class User extends Model
 	    public String toString()
 	    {
 	    	return
-	    	 "ID: " + id +
-	    	", Username: " + username + 
+	    	"Username: " + username + 
 	    	", First Name: " + firstName +
 	    	", Middle Name: " + middleName +
 	    	", Last Name: " + lastName +
@@ -101,6 +106,8 @@ public class User extends Model
 	    	", Passport number: " + passportNumber +
 	    	", Email: " + email +
 	    	", Mobile number: " + mobileNumber +
-	    	", Facebook account: " + facebookAccount;
+	    	", Facebook account: " + facebookAccount +
+	    	", Gender: " + gender +
+	    	", Nationality: " + nationality;
 	    }
 }
