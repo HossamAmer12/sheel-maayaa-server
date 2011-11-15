@@ -10,10 +10,9 @@ import java.util.*;
 import models.*;
 
 public class Offers extends Controller {
-
 	
 	public static String insertOffer(long userId, long flightId, String kgs, 
-									String price, String userStatus){
+									String price, boolean userStatus){
 		try{
 			User user = User.getByKey(User.class, userId);
 			Flight flight = Flight.getByKey(Flight.class, flightId);
