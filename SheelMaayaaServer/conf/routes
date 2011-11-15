@@ -19,7 +19,8 @@ GET		/filterairportsoffers/{source}/{destination}/{date}/{userStatus}/{kgs}/{pri
 
 GET 	/insertflight/{flightNumber}/{source}/{destination}/{departureDate}									  Flights.insertFlight
 
-GET		/insertuser/{username}/{gender}/{nationality}														  Users.insertUser
+			
+ GET		/insertuser/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nationality}/{passportNumber}/{gender}								Users.insertUser
 
 
 # Ignore favicon requests
