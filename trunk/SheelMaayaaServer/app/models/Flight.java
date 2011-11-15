@@ -29,8 +29,8 @@ public class Flight extends Model
 		@Column("destination")
 	    public String destination;
 		
-		@Column("departure_date_time")
-	    public Date departureDateTime;   //Use java.util.Date, it works. Don't use Siena DateTime, its an annotation, not an object.
+		@Column("departure_date")
+	    public String departureDate;   //Use java.util.Date, it works. Don't use Siena DateTime, its an annotation, not an object.
 
 	 //   @OneToMany(mappedBy = "flight")
 	 //   public List<Offer> offers;
@@ -47,21 +47,21 @@ public class Flight extends Model
 	        
 	    }*/
 	    
-	    public Flight(String flightNumber, String source, String destination, Date departureDateTime) {
+	    public Flight(String flightNumber, String source, String destination, String departureDate) {
 	        this.flightNumber = flightNumber;
 	        this.source = source;
 	        this.destination = destination;
-	        this.departureDateTime = departureDateTime;
+	        this.departureDate = departureDate;
 	        
 	    }
 	    
 	    
-	    public Date getDepartureDateTime() {
-	        return departureDateTime;
+	    public String getDepartureDate() {
+	        return departureDate;
 	    }
 
-	    public void setDepartureDateTime(Date departureDateTime) {
-	        this.departureDateTime = departureDateTime;
+	    public void setDepartureDate(String departureDate) {
+	        this.departureDate = departureDate;
 	    }
 
 	    public String getDestination() {
@@ -107,7 +107,7 @@ public class Flight extends Model
 		public String toString() {
 			return "Flight [id=" + id + ", flightNumber=" + flightNumber
 					+ ", source=" + source + ", destination=" + destination
-					+ ", departureDateTime=" + departureDateTime + "]";
+					+ ", departureDate=" + departureDate + "]";
 		}
 
 	    //XXX I am not sure yet!!!
