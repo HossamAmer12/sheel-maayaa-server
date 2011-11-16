@@ -3,7 +3,22 @@ package controllers;
 import models.Confirmation;
 import models.Offer;
 import models.User;
+
+
+
+import play.libs.Mail;
 import play.mvc.Controller;
+
+// Mail import
+import java.util.Properties;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 
 public class Confirmations extends Controller {
 	
@@ -87,6 +102,48 @@ public class Confirmations extends Controller {
 			return tmp + " Different Satatus than 1 and 2!!";
     		
     }
+    
+//    public static void sendMail()
+//    {
+//    	SimpleEmail email = new SimpleEmail();
+//    	try {
+//			email.setFrom("hossam.amer12@gmail.com");
+//			email.addTo("hossam.amer12@gmail.com");
+//	    	email.setSubject("subject");
+//	    	email.setMsg("Hello from mail");
+//	    	Mail.send(email);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			
+//			renderJSON(e);
+//		}
+//    	 
+//    }
+    
+    public static void sendMail()
+    {
+    	Properties props = new Properties();
+        Session session = Session.getDefaultInstance(props, null);
+
+        String msgBody = "...";
+    	try {
+    		 Message msg = new MimeMessage(session);
+             msg.setFrom(new InternetAddress("hossam.amer12@gmail.com", "Example.com Admin"));
+             msg.addRecipient(Message.RecipientType.TO,
+                              new InternetAddress("hossam.amer12@gmail.com", "Mr. User"));
+             msg.setSubject("Your SheelExample.com account has been activated");
+             msg.setText(msgBody);
+             Transport.send(msg);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+			renderJSON(e);
+		}
+    	 
+    }
+
     
     
 }
