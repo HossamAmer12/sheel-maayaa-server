@@ -1,5 +1,8 @@
 package models;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import siena.Column;
 import siena.Filter;
 import siena.Generator;
@@ -59,9 +62,11 @@ public class User extends Model
 	    public Query <Offer> offers;
 	    
 	    @Filter("user1")
+	    @Cascade({CascadeType.SAVE_UPDATE})
 	    public Query <Confirmation> confirmations1;
 	    
 	    @Filter("user2")
+	    @Cascade({CascadeType.SAVE_UPDATE})
 	    public Query <Confirmation> confirmations2;
 	    
 	    public User(

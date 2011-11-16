@@ -1,14 +1,9 @@
 package controllers;
 
-import play.*;
-import play.mvc.*;
-import siena.DateTime;
-
-import java.util.*;
-
-//import ClientModels.CFlight;
-
-import models.*;
+import models.Confirmation;
+import models.Offer;
+import models.User;
+import play.mvc.Controller;
 
 public class Confirmations extends Controller {
 	
@@ -45,17 +40,25 @@ public class Confirmations extends Controller {
     				else if(!confirmation.getStatusTransactionUser1() 
     						&& confirmation.getStatusTransactionUser2())
     					{
-//    						
+//    						confirmation.setUser1(user);
+//    						confirmation.setStatusTransactionUser1(true);
     					confirmation.user1 = user;
+//    					user.update();
     					confirmation.statusTransactionUser1 = true;
-    					confirmation.save();
     					
-
-    					user.update();
+    					user.confirmations1.fetch().add(confirmation);
+    					
+    					
+//    					confirmation.update();
+//   					confirmation.save();
+//    					user.update();
+    					confirmation.save();
     					user.save();
     					
-    					renderJSON(confirmation);
-    						return "Success: User1 confirms an already confirmed offer by User2";
+    					render(confirmation);
+
+    						return "Empty: " + user.confirmations1.fetch().isEmpty() + 
+    						") Success: User1 confirms an already confirmed offer by User2";
     					}
     				//10
     				else if (confirmation.getStatusTransactionUser1() 
@@ -84,4 +87,6 @@ public class Confirmations extends Controller {
 			return tmp + " Different Satatus than 1 and 2!!";
     		
     }
+    
+    
 }
