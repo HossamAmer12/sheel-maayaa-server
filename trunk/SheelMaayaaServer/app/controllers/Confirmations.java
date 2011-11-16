@@ -51,16 +51,30 @@ public class Confirmations extends Controller {
      * Sends mail thru the server
      */
     
-    private static void sendMail(String sender, String recepient, int user_type)
+    private static void sendMail(String sender, String recepient, int user_type, User user1, User user2, Offer offer)
     {
     	Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
         String msgBody  = ""; 
-        
+        double price = offer.noOfKilograms*offer.pricePerKilogram; 
        if(user_type == 1)
-    	  msgBody = "More w8t";
+       {  		 
+    	   msgBody = "Hello " + user1.username + ", \n\n"
+    	   			+ "This is an auto confirmation from Sheel M3aya app describing details of your transaction.\n\n"
+    	   			+ "You have requested " +  offer.noOfKilograms + " kilograms from "  
+    	   			+ user2.username +  " with " +  price +  " euros.\n\n" 
+    	   			+ "Have a nice flight,\n Sheel M3aya team";
+    	   
+       }
        else
-    	   msgBody = "Less w8t";
+       {
+    	   msgBody = "Hello " + user2.username + ", \n\n"
+  			+ "This is an auto confirmation from Sheel M3aya app describing details of your transaction.\n\n"
+  			+ "You have offered " +  offer.noOfKilograms + " kilograms to " 
+  			+ user1.username +  " with " +  price +  " euros.\n\n"  
+  			+ "Have a nice flight,\n Sheel M3aya team";
+    	   
+       }
        
     	try {
     		 Message msg = new MimeMessage(session);
@@ -97,12 +111,11 @@ public class Confirmations extends Controller {
 			{
 				return "Failure: This offer has been already confirmed by two users";
 			} //01
-			else if(!confirmation.getStatusTransactionUser1() 
-					&& confirmation.getStatusTransactionUser2())
+			else if(!confirmation.getStatusTransactionUser1())
 				{
 
-				sendMail("hossam.amer12@gmail.com", "hossam.amer12@gmail.com", 0);
-				sendMail("hossam.amer12@gmail.com", "hossam.amer12@gmail.com", 1);
+				sendMail("hossam.amer12@gmail.com", "hossam.amer12@gmail.com", 0, user, confirmation.user2, offer);
+				sendMail("hossam.amer12@gmail.com", "hossam.amer12@gmail.com", 1, user, confirmation.user2, offer);
 				
 				confirmation.user1 = user;
 				confirmation.statusTransactionUser1 = true;
@@ -116,8 +129,7 @@ public class Confirmations extends Controller {
 					") Success: User1 confirms an already confirmed offer by User2";
 				}
 			//10
-			else if (confirmation.getStatusTransactionUser1() 
-					&& !confirmation.getStatusTransactionUser2())
+			else if (confirmation.getStatusTransactionUser1())
 				{
 					return "Failure: User1 is confirming an already confirmed offer by " +
 							"another User1";
@@ -161,6 +173,9 @@ public class Confirmations extends Controller {
 			else if (!confirmation.getStatusTransactionUser2())
 				{
 				
+				sendMail("hossam.amer12@gmail.com", "hossam.amer12@gmail.com", 0, confirmation.user1, user, offer);
+				sendMail("hossam.amer12@gmail.com", "hossam.amer12@gmail.com", 1, confirmation.user1, user, offer);
+				
 				confirmation.user2 = user;
 				confirmation.statusTransactionUser2 = true;
 				
@@ -169,9 +184,6 @@ public class Confirmations extends Controller {
 				confirmation.save();
 				user.save();
 				
-				sendMail("hossam.amer12@gmail.com", "hossam.amer12@gmail.com", 0);
-				sendMail("hossam.amer12@gmail.com", "hossam.amer12@gmail.com", 1);
-					
 					return "Empty: " + user.confirmations2.fetch().isEmpty() + 
 					") Success: User2 confirms an already confirmed offer by User1";
 					
