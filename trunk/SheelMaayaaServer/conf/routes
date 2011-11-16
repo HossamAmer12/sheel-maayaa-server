@@ -21,7 +21,7 @@ GET		/filterairportsoffers/{source}/{destination}/{date}/{userStatus}/{kgs}/{pri
 GET 	/insertflight/{flightNumber}/{source}/{destination}/{departureDate}									  Flights.insertFlight
 
 			
- GET		/insertuser/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nationality}/{passportNumber}/{gender}								Users.insertUser
+ GET		/insertuser/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nationality}/{passportNumber}/{gender}/{passportPhoto}									Users.insertUser
 
 GET 	/testing/{gender}/{nationality} 	Offers.testing
 
