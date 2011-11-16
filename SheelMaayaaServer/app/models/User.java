@@ -109,7 +109,6 @@ public class User extends Model
 	    	", First Name: " + firstName +
 	    	", Middle Name: " + middleName +
 	    	", Last Name: " + lastName +
-	    	", Passport photo: " + passportPhoto +
 	    	", Passport number: " + passportNumber +
 	    	", Email: " + email +
 	    	", Mobile number: " + mobileNumber +
