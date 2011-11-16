@@ -12,6 +12,40 @@ import models.*;
 
 public class Offers extends Controller {
 	
+	
+	public static String insertNewOffer(int kgs,
+										int price,
+										int userStatus,
+										String flightNumber,
+										String source,
+										String destination,
+										String date){
+		
+		try{
+			Query<Flight> flights = Flight.all(Flight.class).filter("flightNumber", flightNumber).
+					filter("source",source).filter("destination", destination).filter("date", date);
+			Flight flight;
+			if(flights.count()==0){
+				flight = new Flight(flightNumber, source, destination, date);
+				flight.save();
+			}
+			else{
+				flight = flights.fetch().get(0);
+			}
+			User user = User.getByKey(User.class, 13);
+			
+			
+			
+			Offer offer = new Offer(user,flight,kgs,price,userStatus,"new");
+			offer.save();
+			return "OK";
+		}
+		catch(Exception e){
+			return e.toString();
+		}
+		
+		
+	}
 
 	public static String insertOffer(long userId, long flightId, int kgs, 
 			int price, int userStatus){
