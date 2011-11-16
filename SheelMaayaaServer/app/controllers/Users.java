@@ -22,10 +22,10 @@ public class Users extends Controller {
 	*/
 	
 	
-	public static String insertUser(String firstName, String middleName, String lastName, String gender, String email, String mobileNumber, String passportNumber, String nationality){
+	public static String insertUser(String firstName, String middleName, String lastName, String gender, String email, String mobileNumber, String passportNumber, String nationality, String passportPhoto){
 		try{
 			
-		User user = new User("", firstName, middleName, lastName, "", passportNumber, email, mobileNumber, "", gender, nationality);
+		User user = new User("", firstName, middleName, lastName, passportPhoto, passportNumber, email, mobileNumber, "", gender, nationality);
 		user.insert();
 		return "Success";
 		}catch(Exception e){
