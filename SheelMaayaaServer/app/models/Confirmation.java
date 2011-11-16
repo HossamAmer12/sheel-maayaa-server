@@ -16,11 +16,11 @@ public class Confirmation extends Model
     	public Offer offer;
 
 		@Column ("user1")
-		@Cascade({CascadeType.SAVE_UPDATE})
+//		@Cascade({CascadeType.SAVE_UPDATE})
     	public User user1;
     	
     	@Column ("user2")
-    	@Cascade({CascadeType.SAVE_UPDATE})
+//    	@Cascade({CascadeType.SAVE_UPDATE})
     	public User user2;
 		
 		/**
