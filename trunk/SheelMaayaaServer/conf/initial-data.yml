@@ -1,0 +1,113 @@
+User(a1):
+    username: Capital Federal
+    firstName: Buenos Aires
+    middleName: bla
+    lastName: bla
+    passportPhoto: bala
+    passportNumber: bla
+    email: obba@mail.com
+    mobileNumber: 12345678910
+    facebookAccount: bla@facebook.com
+    gender: male
+    nationality: egy
+    offers: [offer1, offer2]
+    confirmations1: []
+    confirmations2: []
+    
+    
+
+User(a2):
+    username: Capital Federal2
+    firstName: Buenos Aires
+    middleName: bla
+    lastName: bla
+    passportPhoto: bala
+    passportNumber: bla
+    email: obba@mail.com
+    mobileNumber: 12345678910
+    facebookAccount: bla@facebook.com
+    gender: male
+    nationality: egy
+    offers: [offer3]
+    confirmations1: []
+    confirmations2: []
+    
+    
+User(a3):
+    username: Capital Federal3
+    firstName: Buenos Aires
+    middleName: bla
+    lastName: bla
+    passportPhoto: bala
+    passportNumber: bla
+    email: obba@mail.com
+    mobileNumber: 12345678910
+    facebookAccount: bla@facebook.com
+    gender: male
+    nationality: egy
+    offers: []
+    confirmations1: []
+    confirmations2: []
+    
+    
+User(a4):
+    username: Capital Federal4
+    firstName: Buenos Aires
+    middleName: bla
+    lastName: bla
+    passportPhoto: bala
+    passportNumber: bla
+    email: obba@mail.com
+    mobileNumber: 12345678910
+    facebookAccount: bla@facebook.com
+    gender: male
+    nationality: egy    
+    offers: []
+    confirmations1: []
+    confirmations2: []
+    
+
+Offer(offer1):
+    pricePerKilogram: 10
+    noOfKilograms: 2.4
+    userStatus: 0
+    offerStatus: 0
+    flight: flight1
+    user: a1
+
+Offer(offer2):
+    pricePerKilogram: 10
+    noOfKilograms: 2.4
+    userStatus: 1
+    offerStatus: 0
+    flight: flight2
+    user: a1
+
+Offer(offer3):
+    pricePerKilogram: 10
+    noOfKilograms: 2.4
+    userStatus: 1
+    offerStatus: 0
+    flight: flight3
+    user: a2   
+ 
+Flight(flight1):
+    flightNumber: a001212asd
+    source: Cairo
+    destination: Geneva
+    departureDate: 07-31-2011
+    offers: [offer1]
+  
+Flight(flight2):
+    flightNumber: a001212asd
+    source: Cairo
+    destination: Geneva
+    departureDate: 07-31-2011
+    offers: [offer2]
+
+Flight(flight3):
+    flightNumber: a001212asd
+    source: Cairo
+    destination: Beirut
+    departureDate: 11-04-2011
+    offers: [offer3]
