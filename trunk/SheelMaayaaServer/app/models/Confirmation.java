@@ -1,6 +1,9 @@
 package models;
 
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import siena.*;
 
 @Table("Confirmation")
@@ -13,9 +16,11 @@ public class Confirmation extends Model
     	public Offer offer;
 
 		@Column ("user1")
+		@Cascade({CascadeType.SAVE_UPDATE})
     	public User user1;
     	
     	@Column ("user2")
+    	@Cascade({CascadeType.SAVE_UPDATE})
     	public User user2;
 		
 		/**
@@ -108,6 +113,11 @@ public class Confirmation extends Model
 
 	    public void setUser2(User user2) {
 	        this.user2 = user2;
+	    }
+	    
+	    public Query <Confirmation> all()
+	    {
+	    	return Model.all(Confirmation.class);
 	    }
 	    
 

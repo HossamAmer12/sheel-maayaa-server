@@ -17,47 +17,71 @@ public class Confirmations extends Controller {
      * Creates a confirmation inside the database.
      */
     
-    public static String insertConfirmation(long userId, long offerId, int user_status){
+    public static String insertConfirmation(long userId, long offerId, int user_status)
+    {
 		
-    	try
-    	{
+    	
     		User user = User.getByKey(User.class, userId);
     		Offer offer = Offer.getByKey(Offer.class, offerId);
     		
-    		if (user_status == 1)
+    		String tmp = "";
+    		
+    		if (user_status == 1) // More weight
     		{
+    			tmp = "I was here";
+    			//there is a confirmation 
     			try {
     				
-//    				Confirmation confirmation = 
-    					Confirmation.all(Confirmation.class).filter("user1", user).
-    				filter("offer", offer).fetch().get(0);
+    				Confirmation confirmation = 
+    					Confirmation.all(Confirmation.class).
+    					filter("offer", offer).fetch().get(0);
     				
-    				return "There is already a confirmation from this user";
-    				
-				} catch (NullPointerException e) {
-					// TODO: handle exception
+    				// 11
+    				if (confirmation.getStatusTransactionUser1() 
+    						&& confirmation.getStatusTransactionUser2())
+    				{
+    					return "Failure: This offer has been already confirmed by two users";
+    				} //01
+    				else if(!confirmation.getStatusTransactionUser1() 
+    						&& confirmation.getStatusTransactionUser2())
+    					{
+//    						
+    					confirmation.user1 = user;
+    					confirmation.statusTransactionUser1 = true;
+    					confirmation.save();
+    					
+
+    					user.update();
+    					user.save();
+    					
+    					renderJSON(confirmation);
+    						return "Success: User1 confirms an already confirmed offer by User2";
+    					}
+    				//10
+    				else if (confirmation.getStatusTransactionUser1() 
+    						&& !confirmation.getStatusTransactionUser2())
+    					{
+    						return "Failure: User1 is confirming an already confirmed offer by " +
+    								"another User1";
+    					}
 					
+				} catch (Exception e) {
+					// TODO: handle exception
+					//00
 					new Confirmation(offer, user, null, true, false, false, false).insert();
-					return "This confirmation is fresh!";
+					return "Success: This confirmation is new!";
 				}
-    				
+    		}// end if (user_status == 1)
+    		else
+    		{
+    				new Confirmation(offer, null, user, false, true, false, false).insert();
+    				return "Success: User2 cofirms a new offer";
     		}
     		
-    		else
-    			new Confirmation(offer, user, null, false, true, false, false).insert();
-    	
+    //		renderJSON(Confirmation.all(Confirmation.class).
+	//		filter("offer", offer).fetch().get(0));
     		
+			return tmp + " Different Satatus than 1 and 2!!";
     		
-    		
-			return "Success";
-		 }
-    	
-    	catch(Exception e)
-    	{
-			return e.toString();
-		}
-	}
-	
-	
-    
+    }
 }
