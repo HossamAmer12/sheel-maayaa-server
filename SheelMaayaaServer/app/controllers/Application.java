@@ -68,15 +68,21 @@ public class Application extends Controller {
 		
 	public static void index() {
         
-    	User bob = new User("balalaika", 
-    			"aa", "", "", 
-    			"", "", "", "", "","","");
-    	
-    	bob.insert();
-    	
-    	User hashas = User.all(User.class).get();
-    	
-    	renderJSON (hashas);
+//    	User bob = new User("balalaika", 
+//    			"aa", "", "", 
+//    			"", "", "", "", "","","");
+//    	
+//    	bob.insert();
+//    	
+//    	User hashas = User.all(User.class).get();
+//    	
+//    	renderJSON (hashas);
+
+		//For testing the bootstrap
+//		User x = User.all(User.class).get();
+//		renderJSON(x);
+		
+		render();
     }
     
 }
