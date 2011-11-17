@@ -223,3 +223,10 @@ public class Confirmations extends Controller {
 
     
 }
+
+
+/**
+ * http://groups.google.com/group/play-framework/browse_thread/thread/32c0c387c68ee30
+ * http://groups.google.com/group/play-framework/browse_thread/thread/35053d43ff2fc510?pli=1
+ * http://groups.google.com/group/siena-discuss/browse_thread/thread/d9484404594329f1
+*/
