@@ -116,20 +116,31 @@ public class Confirmations extends Controller {
 
 				// Make the user2 in the cache
 				confirmation.user2.get();
+				
+//			if(confirmation.user2.id != user.id)
+//			{		
 
 				sendMail("hossam.amer12@gmail.com", "hossam.amer12@gmail.com", 0, user, confirmation.user2, offer);
 				sendMail("hossam.amer12@gmail.com", "hossam.amer12@gmail.com", 1, user, confirmation.user2, offer);
+				//add-on
+//				confirmation.user1.get();
 				
 				confirmation.user1 = user;
 				confirmation.statusTransactionUser1 = true;
 				
 				user.confirmations1.fetch().add(confirmation);
+				//add-on
+//				confirmation.user1.save();
 				
 				confirmation.save();
 				user.save();
 						
-					return "Empty: " + user.confirmations1.fetch().isEmpty() + 
-					") Success: User1 confirms an already confirmed offer by User2";
+				return "12";
+//					return "Empty: " + user.confirmations1.fetch().isEmpty() + 
+//					") Success: User1 confirms an already confirmed offer by User2";
+//			}// end if(confirmation.user2.id != user.id)
+//			else
+//				return "Failure: The same user1 confirms the same offer!";
 				}
 			//10
 			else if (confirmation.getStatusTransactionUser1())
@@ -144,7 +155,7 @@ public class Confirmations extends Controller {
 			// TODO: handle exception
 			//00
 			new Confirmation(offer, user, null, true, false, false, false).insert();
-			return "Success: This confirmation is new!";
+			return  e.getStackTrace().toString() + " " + e.toString() + "\n\nSuccess: This confirmation is new!";
 		}
     }// end insertConfirmationUser1(long userId, long offerId)
 
