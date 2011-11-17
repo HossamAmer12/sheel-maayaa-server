@@ -114,6 +114,9 @@ public class Confirmations extends Controller {
 			else if(!confirmation.getStatusTransactionUser1())
 				{
 
+				// Make the user2 in the cache
+				confirmation.user2.get();
+
 				sendMail("hossam.amer12@gmail.com", "hossam.amer12@gmail.com", 0, user, confirmation.user2, offer);
 				sendMail("hossam.amer12@gmail.com", "hossam.amer12@gmail.com", 1, user, confirmation.user2, offer);
 				
@@ -172,6 +175,8 @@ public class Confirmations extends Controller {
 			//10
 			else if (!confirmation.getStatusTransactionUser2())
 				{
+				// Make the user1 in the cache
+				confirmation.user1.get();
 				
 				sendMail("hossam.amer12@gmail.com", "hossam.amer12@gmail.com", 0, confirmation.user1, user, offer);
 				sendMail("hossam.amer12@gmail.com", "hossam.amer12@gmail.com", 1, confirmation.user1, user, offer);
