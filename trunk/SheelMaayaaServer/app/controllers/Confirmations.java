@@ -117,8 +117,8 @@ public class Confirmations extends Controller {
 				// Make the user2 in the cache
 				confirmation.user2.get();
 				
-//			if(confirmation.user2.id != user.id)
-//			{		
+			if(confirmation.user2.id != user.id)
+			{		
 
 				sendMail("hossam.amer12@gmail.com", "hossam.amer12@gmail.com", 0, user, confirmation.user2, offer);
 				sendMail("hossam.amer12@gmail.com", "hossam.amer12@gmail.com", 1, user, confirmation.user2, offer);
@@ -138,10 +138,10 @@ public class Confirmations extends Controller {
 				return "12";
 //					return "Empty: " + user.confirmations1.fetch().isEmpty() + 
 //					") Success: User1 confirms an already confirmed offer by User2";
-//			}// end if(confirmation.user2.id != user.id)
-//			else
-//				return "Failure: The same user1 confirms the same offer!";
-				}
+			}// end if(confirmation.user2.id != user.id)
+			else
+				return "Failure: The same user1 confirms the same offer!";
+			}
 			//10
 			else if (confirmation.getStatusTransactionUser1())
 				{
@@ -189,6 +189,10 @@ public class Confirmations extends Controller {
 				// Make the user1 in the cache
 				confirmation.user1.get();
 				
+				if(confirmation.user1.id != user.id)
+				{
+					
+				
 				sendMail("hossam.amer12@gmail.com", "hossam.amer12@gmail.com", 0, confirmation.user1, user, offer);
 				sendMail("hossam.amer12@gmail.com", "hossam.amer12@gmail.com", 1, confirmation.user1, user, offer);
 				
@@ -202,7 +206,9 @@ public class Confirmations extends Controller {
 				
 					return "Empty: " + user.confirmations2.fetch().isEmpty() + 
 					") Success: User2 confirms an already confirmed offer by User1";
-					
+				}// end if(confirmation.user2.id != user.id)
+				else
+					return "Failure: The same user2 confirms the same offer!";
 				}
 			
 			return "Weired from user2";
