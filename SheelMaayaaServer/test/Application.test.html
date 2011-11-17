@@ -2,6 +2,20 @@
 
 #{selenium}
     // Open the home page, and check that no error occured
-    open('/')
+    open('/insertconfirmation/8/13/0')
     assertNotTitle('Application error')
+     assertTextPresent('Failure')
+     
+     open('/insertconfirmation/8/13/0')
+     assertNotTitle('Application error')
+     assertTextPresent('Failure')
+     
+     open('/insertconfirmation/8/13/1')
+     assertNotTitle('Application error')
+     assertTextPresent('Failure')
+     
+   //  open('/insertconfirmation/15/13/1')
+    // assertNotTitle('Application error')
+    // assertTextPresent('Success')
+     
 #{/selenium}
