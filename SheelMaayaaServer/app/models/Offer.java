@@ -50,6 +50,11 @@ public class Offer extends Model
     
     //public String currency; //Will be done next sprint
     
+	public Offer(){
+		
+	}
+	
+	
     public Offer(User user, Flight flight,
     		int noOfKilograms,
             int pricePerKilogram,
