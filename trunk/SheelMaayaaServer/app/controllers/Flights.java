@@ -19,6 +19,29 @@ public class Flights extends Controller {
 		}
 	}
 	
+	public static String getAllFlightNumbers(){
+		
+		try{
+		String flightString = "";
+		
+		List<Flight> flights = Flight.all(Flight.class).fetch();
+		
+		List<String> numbers = new ArrayList<String>();
+		
+		for(int i = 0; i<flights.size();i++)
+		{
+			numbers.add(flights.get(i).flightNumber);
+			
+			flightString += numbers.get(i) + " , ";
+			
+		}
+		return flightString;
+		
+		}catch(Exception e){
+			return e.toString();
+		}
+	}
+	
 	public static List<Flight> getFlightsByFlightNumber(String flightNumber, String date){
 		
 		try{
