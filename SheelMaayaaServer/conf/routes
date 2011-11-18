@@ -22,11 +22,17 @@ GET		/filterflightnumberoffers/{flightNumber}/{date}/{userStatus}/{kgs}/{price}/
 GET		/filterairportsoffers/{source}/{destination}/{date}/{userStatus}/{kgs}/{price}/{gender}/{nationality} Offers.filterAirportsOffers
 
 GET 	/insertflight/{flightNumber}/{source}/{destination}/{departureDate}									  Flights.insertFlight
+GET 	/getallflightnumbers/																				  Flights.getAllFlightNumbers
 
-			
+GET		/insertuser/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nationality}/{passportNumber}/{gender}								Users.insertUser
+=======
  GET		/insertuser/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nationality}/{passportNumber}/{gender}/{passportPhoto}									Users.insertUser
 
+
 GET 	/testing/{gender}/{nationality} 	Offers.testing
+GET 	/getofferflight/{offerId}			Offers.getOfferFlight
+
+GET		/testing2							Offers.testing2
 
 
 # Ignore favicon requests
