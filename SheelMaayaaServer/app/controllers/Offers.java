@@ -1,44 +1,70 @@
 package controllers;
 
-import play.*;
-import play.mvc.*;
-import siena.DateTime;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import models.Flight;
+import models.Offer;
+import models.User;
+import play.mvc.Controller;
 import siena.Query;
 
-import java.util.*;
-
-
-import models.*;
+import com.google.gson.Gson;
 
 public class Offers extends Controller {
 	
+	/**
+	 * Returns all offers in the system
+	 * @return
+	 */
+	public static String view(){
+		List<Offer> flights = Offer.all(Offer.class).fetch();
+		String x = "";
+		for(int i = 0 ; i < flights.size() ; i++)
+		{
+			x+= flights.get(i).toString()+"\n";
+		}
+		return x;
+	}
 	
-	public static String insertNewOffer(int kgs,
-										int price,
-										int userStatus,
-										String flightNumber,
-										String source,
-										String destination,
-										String date){
+	public static String insertNewOffer(){
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(request.body));
 		
 		try{
-			Query<Flight> flights = Flight.all(Flight.class).filter("flightNumber", flightNumber).
-					filter("source",source).filter("destination", destination).filter("date", date);
-			Flight flight;
-			if(flights.count()==0){
-				flight = new Flight(flightNumber, source, destination, date);
-				flight.save();
+			String input = br.readLine();
+			String jsonFlight = input.split("<>")[0];
+			String jsonOffer = input.split("<>")[1];
+			 
+			Gson gson = new Gson();
+			Flight f = gson.fromJson(jsonFlight, Flight.class);
+		
+			
+			List<Flight>flights = Flight.all(Flight.class).filter("source",f.source).filter("destination", f.destination)
+			.filter("departureDate",f.departureDate).filter("flightNumber", f.flightNumber).fetch();
+			if(flights.size()==0){
+				 f.insert();
 			}
 			else{
-				flight = flights.fetch().get(0);
+				f = flights.get(0);
 			}
-			User user = User.getByKey(User.class, 13);
+			
+			Offer offer = gson.fromJson(jsonOffer, Offer.class);
+			offer.setFlight(f);
+			
+			///////////////////////////////////////// SHOULD GET USER INFO FROM SERVER AFTER LOGIN ////////////////////////////////
+			
+			
+			offer.setUser(User.all(User.class).get());
 			
 			
 			
-			Offer offer = new Offer(user,flight,kgs,price,userStatus,"new");
-			offer.save();
-			return "OK";
+			
+			///////////////////////////////////////// SHOULD GET USER INFO FROM SERVER AFTER LOGIN ////////////////////////////////
+			offer.insert();
+			return "Success";
 		}
 		catch(Exception e){
 			return e.toString();
