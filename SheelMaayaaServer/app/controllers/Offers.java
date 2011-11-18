@@ -182,35 +182,39 @@ public class Offers extends Controller {
 	public static List<Offer> offerFilterPreferences(List<Flight> flights, int userStatus, int kgs, int price, 
 											String gender, String nationality){
 		try{
-			
+		
 			List<Offer> offersList = new ArrayList<Offer>();
 			
 			Query<Offer> offers;
-			
+		
 			for(int i = 0; i<flights.size();i++)
 			{
-				offers = flights.get(i).offers.filter("userStatus", userStatus);
+				offers = flights.get(i).offers.filter("userStatus", userStatus); 
 				
-				if(kgs != 0){ 
-						if(userStatus == 0)
-							offers.filter("noOfKilograms", kgs);
-	
-						else 
-							offers.filter("noOfKilograms", kgs);
-				}
-			
-				if(price != 0){
-						if(userStatus == 0)
-							offers.filter("pricePerKilogram", price);
-				
-						else
-							offers.filter("pricePerKilogram", price);
+			/*	if(userStatus == 0){
+					if(kgs != 0)
+						offers = offers.order("noOfKilograms");
+					
+					else if(kgs == 0 && price != 0)
+						offers = offers.order("-pricePerKilogram");
 				}
 				
-				//if(kgs != 0 && userStatus == 0)
-					//offers.order("-noOfKilograms");
-				offersList = offers.fetch();
+				else if(userStatus == 1){
+					if(kgs != 0)
+						offers = offers.order("-noOfKilograms");
+					
+					else if(kgs == 0 && price != 0)
+						offers = offers.order("pricePerKilogram");
+				}*/
+				
+				offersList.addAll(offers.fetch());
 			}
+			
+			if(kgs != 0)
+				offersList = filterByKgs(offersList, userStatus, kgs);	
+			
+			if(price != 0)
+				offersList = filterByPrice(offersList, userStatus, price);
 			
 			if(gender.equals("both") && nationality.equals("none"))
 				return offersList;
@@ -222,6 +226,52 @@ public class Offers extends Controller {
 		}
 	}
 	
+	public static List<Offer> filterByKgs(List<Offer> offersList, int userStatus , int kgs){
+		
+		try{
+			
+			List<Offer> filteredOffers = new ArrayList<Offer>();
+			
+			for(int i = 0 ; i < offersList.size() ; i++){
+				
+				Offer offer = offersList.get(i);
+				
+				if(userStatus == 0 && offer.noOfKilograms >= kgs)
+					filteredOffers.add(offer);
+				
+				else if(userStatus == 1 && offer.noOfKilograms <= kgs)
+					filteredOffers.add(offer);
+			}
+			
+			return filteredOffers;
+			
+		}catch(Exception e){
+			return null;}
+	}
+	
+	public static List<Offer> filterByPrice(List<Offer> offersList, int userStatus , int price){
+		
+		try{
+			
+			List<Offer> filteredOffers = new ArrayList<Offer>();
+			
+			for(int i = 0 ; i < offersList.size() ; i++){
+				
+				Offer offer = offersList.get(i);
+				
+				if(userStatus == 0 && offer.pricePerKilogram <= price)
+					filteredOffers.add(offer);
+				
+				else if(userStatus == 1 && offer.pricePerKilogram >= price)
+					filteredOffers.add(offer);
+			}
+			
+			return filteredOffers;
+			
+		}catch(Exception e){
+			return null;}
+	}
+	
 	public static List<Offer> userFilterPreferences(List<Offer> offers, String gender, String nationality){
 		try{
 		
@@ -230,7 +280,9 @@ public class Offers extends Controller {
 		
 			for(int i = 0 ; i < offers.size() ; i++){
 		
-				user = offers.get(i).user;
+				user = offers.get(i).getUser();
+				
+				user.get();
 		
 				if(!gender.equals("both") && !nationality.equals("none")){
 					if(gender.equals(user.gender) && nationality.equals(user.nationality))
@@ -256,50 +308,32 @@ public class Offers extends Controller {
 		}
 	}
 	
-	public static String testing(String gender, String nationality){
-		try{
-		
-			User user;
-			List<Offer> offers = Offer.all(Offer.class).fetch();
-			
-			List<Offer> userFilteredOffers = new ArrayList<Offer>();
-			
-			String offerString = "";
-			
-			for(int i = 0 ; i < offers.size() ; i++){
-		
-				user = offers.get(i).user;
-		
-				if(!gender.equals("both") && !nationality.equals("none")){
-					if(gender.equals(user.gender) && nationality.equals(user.nationality))
-						userFilteredOffers.add(offers.get(i));
-				}
-		
-				else if(!gender.equals("both") && nationality.equals("none")){
-					if(gender.equals(user.gender))
-						userFilteredOffers.add(offers.get(i));
+	
 
-				}
-		
-				else if(gender.equals("both") && !nationality.equals("none")){
-					if(nationality.equals(user.nationality))
-						userFilteredOffers.add(offers.get(i));
-				}
-				
-				offerString += gender + " , " + user.gender + " ... ";
-			}
-			
-			
-			for(int i = 0; i<userFilteredOffers.size();i++)
-			{
-				offerString +=  userFilteredOffers.get(i).toString();
-			}
-			return offerString;
-			
-		}catch(Exception e){
-			return e.toString();
-		}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+/*	if(kgs != 0){ 
+			if(userStatus == 0)
+				offers = offers.filter("noOfKilograms", kgs);
+
+			else 
+				offers = offers.filter("noOfKilograms", kgs);
 	}
 	
+	if(price != 0){
+			if(userStatus == 0)
+				offers = offers.filter("pricePerKilogram", price);
+	
+			else
+				offers = offers.filter("pricePerKilogram", price);		
+	}	*/	
 	
 }
