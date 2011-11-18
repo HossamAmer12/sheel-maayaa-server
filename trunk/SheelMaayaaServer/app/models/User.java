@@ -45,7 +45,7 @@ public class User extends Model
 
 		
 		@Column("passport_photo")
-		 public Text passportPhoto; //url for the passport photo
+		 public String passportPhoto; //url for the passport photo
 		
 		@Column("passport_number")
 	    public String passportNumber;
@@ -87,7 +87,7 @@ public class User extends Model
 	        this.firstName = firstName;
 	        this.middleName = middleName;
 	        this.lastName = lastName;
-	        this.passportPhoto = new Text(passportPhoto);
+	        this.passportPhoto = ":P";//Text(passportPhoto);
 	        this.passportNumber = passportNumber;
 	        this.email = email;
 	        this.mobileNumber = mobileNumber;
@@ -105,7 +105,7 @@ public class User extends Model
 	    public String toString()
 	    {
 	    	return
-	    	"Username: " + username + 
+	    	"User [id: " + id + ", Username: " + username + 
 	    	", First Name: " + firstName +
 	    	", Middle Name: " + middleName +
 	    	", Last Name: " + lastName +
@@ -114,6 +114,6 @@ public class User extends Model
 	    	", Mobile number: " + mobileNumber +
 	    	", Facebook account: " + facebookAccount +
 	    	", Gender: " + gender +
-	    	", Nationality: " + nationality;
+	    	", Nationality: " + nationality + "]";
 	    }
 }
