@@ -1,5 +1,8 @@
 package models;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import siena.Column;
 import siena.Generator;
 import siena.Id;
@@ -34,9 +37,11 @@ public class Offer extends Model
 //  public User user; //offer Creator
 
     @Column("flight")
+    @Cascade({CascadeType.SAVE_UPDATE})
 	public Flight flight;
 	
 	@Column("user")
+	@Cascade({CascadeType.SAVE_UPDATE})
     public User user; //offer Creator
   
 //	@Column("confirmation")
@@ -126,9 +131,12 @@ public class Offer extends Model
 
 	@Override
 	public String toString() {
-		return "Offer [id=" + id + ", noOfKilograms=" + noOfKilograms +
+		
+		User usr = getUser();
+		usr.get();
+		return "[id=" + id + ", noOfKilograms=" + noOfKilograms +
 				", pricePerKilogram=" + pricePerKilogram +
-				", userStatus=" + userStatus + ", offerStatus=" + offerStatus + "]";
+				", userStatus=" + userStatus + ", offerStatus=" + offerStatus + ", userId=" + usr.id + "]";
 	}
 	
 }// end offer class
