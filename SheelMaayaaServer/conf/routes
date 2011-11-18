@@ -27,7 +27,7 @@ GET 	/getallflightnumbers/																				  Flights.getAllFlightNumbers
 GET		/insertuser/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nationality}/{passportNumber}/{gender}								Users.insertUser
 
 GET		/insertuser/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nationality}/{passportNumber}/{gender}/{passportPhoto}									Users.insertUser
-GET /insertuser/						Users.insertUser
+GET /insertuser						Users.insertUser
 
 GET 	/testing/{gender}/{nationality} 	Offers.testing
 GET 	/getofferflight/{offerId}			Offers.getOfferFlight
