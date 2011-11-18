@@ -47,6 +47,10 @@ public class Flight extends Model
 	        
 	    }*/
 	    
+	    public Flight(){
+	    	
+	    }
+	    
 	    public Flight(String flightNumber, String source, String destination, String departureDate) {
 	        this.flightNumber = flightNumber;
 	        this.source = source;
