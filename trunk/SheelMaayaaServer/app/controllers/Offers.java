@@ -80,41 +80,42 @@ public class Offers extends Controller {
 	}
 
 
-	public static String getOffersByFlightNumber(String flightNumber, String date, int userStatus){
+	public static void getOffersByFlightNumber(String flightNumber, String date, int userStatus){
 		
 		try{
 			
 			List<Flight>flights = Flights.getFlightsByFlightNumber(flightNumber, date);
-				
-			String offerString = "";
-			
+
 			List<Offer> offers = new ArrayList<Offer>();
 			
 			for(int i = 0; i<flights.size();i++)
-			{
+			{ 
 				offers.addAll(flights.get(i).offers.filter("userStatus", userStatus).fetch());	
 			}
 			
-			for(int i = 0; i<offers.size();i++)
-			{
-				offerString +=  offers.get(i).toString();
+			Offer offer;
+			
+			for(int i = 0 ; i < offers.size() ; i++){
 				
+				offer = offers.get(i);
+				
+				offer.flight.get();
+				offer.user.get();
 			}
-			return offerString;
+
+			renderJSON(offers);
 			
 		}catch(Exception e){
-			return e.toString();
+			
 		}
 	}
 	
-	public static String getOffersByAirports(String source, String destination, String date, int userStatus){
+	public static void getOffersByAirports(String source, String destination, String date, int userStatus){
 		
 		try{
 			
 			List<Flight>flights = Flights.getFlightsByAirports(source, destination, date);
-				
-			String offerString = "";
-			
+	
 			List<Offer> offers = new ArrayList<Offer>();
 			
 			for(int i = 0; i<flights.size();i++)
@@ -122,59 +123,72 @@ public class Offers extends Controller {
 				offers.addAll(flights.get(i).offers.filter("userStatus", userStatus).fetch());	
 			}
 			
-			for(int i = 0; i<offers.size();i++)
-			{
-				offerString +=  offers.get(i).toString();
+			Offer offer;
+			
+			for(int i = 0 ; i < offers.size() ; i++){
+				
+				offer = offers.get(i);
+				
+				offer.flight.get();
+				offer.user.get();
 			}
-			return offerString;
+
+			renderJSON(offers);
 			
 		}catch(Exception e){
-			return e.toString();
 		}
 	}
 	
-	public static String filterFlightNumberOffers(String flightNumber, String date, int userStatus, int kgs, int price, 
+	public static void filterFlightNumberOffers(String flightNumber, String date, int userStatus, int kgs, int price, 
 									String gender, String nationality){
 		
 		try{
 
 			List<Flight>flights = Flights.getFlightsByFlightNumber(flightNumber, date);
-			
-			String offerString = "";
-			
+
 			List<Offer>offers = offerFilterPreferences(flights, userStatus, kgs, price, gender, nationality);
+
+			Offer offer;
 			
-			for(int i = 0; i<offers.size();i++)
-			{
-				offerString +=  offers.get(i).toString();
+			for(int i = 0 ; i < offers.size() ; i++){
+				
+				offer = offers.get(i);
+				
+				offer.flight.get();
+				offer.user.get();
 			}
-			return offerString;
+			
+			renderJSON(offers);
 			
 		}catch(Exception e){
-			return e.toString();
+			
 		}
 		
 	}
 	
-	public static String filterAirportsOffers(String source, String destination, String date, int userStatus, int kgs, 
+	public static void filterAirportsOffers(String source, String destination, String date, int userStatus, int kgs, 
 										int price, String gender, String nationality){
 		
 		try{
 		
 			List<Flight>flights = Flights.getFlightsByAirports(source, destination, date);
-		
-			String offerString = "";
 			
 			List<Offer>offers = offerFilterPreferences(flights, userStatus, kgs, price, gender, nationality);
 			
-			for(int i = 0; i<offers.size();i++)
-			{
-				offerString +=  offers.get(i).toString();
+			Offer offer;
+			
+			for(int i = 0 ; i < offers.size() ; i++){
+				
+				offer = offers.get(i);
+				
+				offer.flight.get();
+				offer.user.get();
 			}
-			return offerString;
+			
+			renderJSON(offers);
 			
 			}catch(Exception e){
-				return e.toString();
+				
 			}
 		
 		}
