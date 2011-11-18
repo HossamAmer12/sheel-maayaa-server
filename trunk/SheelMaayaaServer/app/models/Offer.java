@@ -139,9 +139,11 @@ public class Offer extends Model
 		
 		User usr = getUser();
 		usr.get();
+		flight.get();
 		return "[id=" + id + ", noOfKilograms=" + noOfKilograms +
 				", pricePerKilogram=" + pricePerKilogram +
-				", userStatus=" + userStatus + ", offerStatus=" + offerStatus + ", userId=" + usr.id + "]";
+				", userStatus=" + userStatus + ", offerStatus=" + offerStatus + ", userId=" + usr.id + 
+				", flightId= "+flight.id+"]";
 	}
 	
 }// end offer class
