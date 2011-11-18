@@ -135,7 +135,7 @@ public class Confirmations extends Controller {
 				confirmation.save();
 				user.save();
 						
-				return "12";
+				return "Success: 12";
 //					return "Empty: " + user.confirmations1.fetch().isEmpty() + 
 //					") Success: User1 confirms an already confirmed offer by User2";
 			}// end if(confirmation.user2.id != user.id)
@@ -155,7 +155,8 @@ public class Confirmations extends Controller {
 			// TODO: handle exception
 			//00
 			new Confirmation(offer, user, null, true, false, false, false).insert();
-			return  e.getStackTrace().toString() + " " + e.toString() + "\n\nSuccess: This confirmation is new!";
+			return "\n\nSuccess: This confirmation is new!";
+//			return  e.getStackTrace().toString() + " " + e.toString() + "\n\nSuccess: This confirmation is new!";
 		}
     }// end insertConfirmationUser1(long userId, long offerId)
 
@@ -204,7 +205,7 @@ public class Confirmations extends Controller {
 				confirmation.save();
 				user.save();
 				
-				return "13";
+				return "Success: 13";
 //					return "Empty: " + user.confirmations2.fetch().isEmpty() + 
 //					") Success: User2 confirms an already confirmed offer by User1";
 				}// end if(confirmation.user2.id != user.id)
@@ -309,7 +310,8 @@ public class Confirmations extends Controller {
 				// TODO: handle exception
 				//00
 				new Confirmation(offer, user, null, true, false, true, false).insert();
-				return  e.getStackTrace().toString() + " " + e.toString() + "\n\nSuccess: This confirmation is new!";
+				return  "\n\nSuccess: This confirmation is new!";
+//				return  e.getStackTrace().toString() + " " + e.toString() + "\n\nSuccess: This confirmation is new!";
 			}
 	    }// end insertConfirmationFinalUser1(long userId, long offerId)
 	
@@ -357,7 +359,7 @@ public class Confirmations extends Controller {
 				confirmation.save();
 				user.save();
 				
-				return "13";
+				return "Success: 13";
 //					return "Empty: " + user.confirmations2.fetch().isEmpty() + 
 //					") Success: User2 confirms an already confirmed offer by User1";
 				}// end if(confirmation.user2.id != user.id)
