@@ -6,9 +6,9 @@
 
 # Home page
 GET     /                                     				    										  	  Application.index
-POST    /insertnewoffer/																					  Offers.insertNewOffer
-
-POST    /insertflight/																						  Application.insertFlight(flight)
+POST    /insertnewoffer																						  Offers.insertNewOffer
+GET		/getuser1																							  Users.getUser1
+POST    /insertflight																						  Application.insertFlight
 GET     /test																								  Application.test
 GET     /insertconfirmation/{userId}/{offerId}/{user_status}											  	  Confirmations.insertConfirmation
 GET     /insertfinalconfirmation/{userId}/{offerId}/{user_status}											  	  Confirmations.insertConfirmationFinal
