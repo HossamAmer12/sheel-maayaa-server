@@ -43,7 +43,6 @@ public class User extends Model
 		@Column("last_name")
 	    public String lastName;
 
-		
 		@Column("passport_photo")
 		 public String passportPhoto; //url for the passport photo
 		
@@ -66,9 +65,11 @@ public class User extends Model
 	    public Query <Offer> offers;
 	    
 	    @Filter("user1")
+	    @Cascade({CascadeType.SAVE_UPDATE})
 	    public Query <Confirmation> confirmations1;
 	    
 	    @Filter("user2")
+	    @Cascade({CascadeType.SAVE_UPDATE})
 	    public Query <Confirmation> confirmations2;
 	    
 	    public User(
