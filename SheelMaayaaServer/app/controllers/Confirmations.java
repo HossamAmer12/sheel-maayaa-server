@@ -155,7 +155,7 @@ public class Confirmations extends Controller {
 			// TODO: handle exception
 			//00
 			new Confirmation(offer, user, null, true, false, false, false).insert();
-			return "\n\nSuccess: This confirmation is new!";
+			return "Success: This confirmation is new!";
 //			return  e.getStackTrace().toString() + " " + e.toString() + "\n\nSuccess: This confirmation is new!";
 		}
     }// end insertConfirmationUser1(long userId, long offerId)
