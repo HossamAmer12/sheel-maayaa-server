@@ -120,8 +120,8 @@ public class Confirmations extends Controller {
 			if(confirmation.user2.id != user.id)
 			{		
 				user.get();
-//				sendMail(confirmation.user2.email, 0, user, confirmation.user2, offer);
-//				sendMail(user.email, 1, user, confirmation.user2, offer);
+				sendMail(confirmation.user2.email, 0, user, confirmation.user2, offer);
+				sendMail(user.email, 1, user, confirmation.user2, offer);
 				//add-on
 //				confirmation.user1.get();
 				
@@ -194,8 +194,8 @@ public class Confirmations extends Controller {
 				{
 					
 				user.get();
-//				sendMail(confirmation.user1.email, 0, confirmation.user1, user, offer);
-//				sendMail(user.email, 1, confirmation.user1, user, offer);
+				sendMail(confirmation.user1.email, 0, confirmation.user1, user, offer);
+				sendMail(user.email, 1, confirmation.user1, user, offer);
 				
 				confirmation.user2 = user;
 				confirmation.statusTransactionUser2 = true;
@@ -272,8 +272,8 @@ public class Confirmations extends Controller {
 				{	
 					
 					user.get();	
-//					sendMail(confirmation.user2.email, 0, user, confirmation.user2, offer);
-//					sendMail(user.email, 1, user, confirmation.user2, offer);
+					sendMail(confirmation.user2.email, 0, user, confirmation.user2, offer);
+					sendMail(user.email, 1, user, confirmation.user2, offer);
 	
 //					sendMail("hossam.amer12@gmail.com", "hossam.amer12@gmail.com", 0, user, confirmation.user2, offer);
 //					sendMail("hossam.amer12@gmail.com", "hossam.amer12@gmail.com", 1, user, confirmation.user2, offer);
@@ -348,8 +348,8 @@ public class Confirmations extends Controller {
 				{
 					
 				user.get();
-//				sendMail(confirmation.user1.email, 0, confirmation.user1, user, offer);
-//				sendMail(user.email, 1, confirmation.user1, user, offer);
+				sendMail(confirmation.user1.email, 0, confirmation.user1, user, offer);
+				sendMail(user.email, 1, confirmation.user1, user, offer);
 				
 				confirmation.user2 = user;
 				confirmation.statusDeliveryUser2 = true;
