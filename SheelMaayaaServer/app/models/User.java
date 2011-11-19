@@ -88,7 +88,7 @@ public class User extends Model
 	        this.firstName = firstName;
 	        this.middleName = middleName;
 	        this.lastName = lastName;
-	        this.passportPhoto = ":P";//Text(passportPhoto);
+	        this.passportPhoto = passportPhoto;
 	        this.passportNumber = passportNumber;
 	        this.email = email;
 	        this.mobileNumber = mobileNumber;

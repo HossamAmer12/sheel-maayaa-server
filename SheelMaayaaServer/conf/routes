@@ -25,7 +25,7 @@ GET 	/getallflightnumbers/																				  Flights.getAllFlightNumbers
 #GET		/insertuser/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nationality}/{passportNumber}/{gender}								Users.insertUser
 
 #GET		/insertuser/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nationality}/{passportNumber}/{gender}/{passportPhoto}									Users.insertUser
-GET /registeruser						Users.registerUser
+POST /registeruser						Users.registerUser
 GET /insertuser/{facebookID}/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nationality}/{passportNumber}/{gender}/{passportPhoto}									Users.insertUser
 
 
