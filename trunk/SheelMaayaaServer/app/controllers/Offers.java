@@ -31,7 +31,7 @@ public class Offers extends Controller {
 		return x;
 	}
 	
-	public static String insertNewOffer(){
+	public static String insertNewOffer(long uid){
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(request.body));
 		
@@ -58,9 +58,15 @@ public class Offers extends Controller {
 			
 			///////////////////////////////////////// SHOULD GET USER INFO FROM SERVER AFTER LOGIN ////////////////////////////////
 			
+			try{
+				if(uid!=0){
+				offer.setUser(User.getByKey(User.class, uid));}
+			}catch(Exception e){
 			
-			offer.setUser(User.all(User.class).get());
-			
+				offer.setUser(User.all(User.class).get());	//Assign offer to first user in the database
+				//This will be used in case of failure of registration on the client side
+				
+			}
 			
 			
 			
