@@ -1,12 +1,23 @@
 package com.sheel.app.test;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.TouchUtils;
 import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import android.app.*;
+import android.content.*;
+import android.test.*;
+import android.test.suitebuilder.annotation.*;
+import android.util.*;
+import android.view.*;
+import android.widget.*;
+
+
 import com.sheel.app.PhoneCommunication;
+import com.sheel.app.R;
 
 public class SheelMaayaaTest extends
 		ActivityInstrumentationTestCase2<PhoneCommunication> {
@@ -19,7 +30,6 @@ public class SheelMaayaaTest extends
 	private ImageButton btn_call;
 	private Button btn_send_sms;
 	private Button btn_confirm;	
-
 	
 	public SheelMaayaaTest() {
 		
@@ -61,7 +71,7 @@ public class SheelMaayaaTest extends
 		assertNotNull(mobile_number.getText());
 		assertNotNull(email.getText());
 		assertNotNull(fb_account.getText());
-		
+	
 	}	
 	
 	
@@ -84,6 +94,9 @@ public class SheelMaayaaTest extends
 		
 //		this.sendKeys(KeyEvent.KEYCODE_DPAD_CENTER);
 		this.sendKeys(KeyEvent.KEYCODE_DPAD_DOWN);
+//	    TouchUtils.clickView(btn_call, v)
+
+		
 //		Activity x = this.getActivity();
 //		TextView res = (TextView) x.findViewById(com.sheel.app.R.id.)
 		
@@ -91,42 +104,78 @@ public class SheelMaayaaTest extends
 		
 	}
 	
-//	public void testCommunicationUI()
-//	{
-//		// Run the UI thread
-//		// Nested Classes :D
-//		
-//		mActivity.runOnUiThread
-//		(
-//				new Runnable() {
-//					
-//					public void run() {
-//						btn_call.requestFocus();
-//					}//end of run
-//				}// end of Runnable instantiation
-//		);//end runUI
-		
-//		this.sendKeys(KeyEvent.KEYCODE_DPAD_CENTER);
-//	    for (int i = 1; i <= TEST_POSITION; i++) {
-//	      this.sendKeys(KeyEvent.KEYCODE_DPAD_DOWN);
-//	    } // end of for loop
-//	    
-//	    //Pad down key
-//	    this.sendKeys(KeyEvent.KEYCODE_DPAD_DOWN);
-//	    
-//	    
-//	    //Check the current status of the spinner
-//	    mPos = mSpinner.getSelectedItemPosition();
-//	    mSelection = (String)mSpinner.getItemAtPosition(mPos);
-//	    TextView resultView =
-//	      (TextView) mActivity.findViewById(
-//	        com.android.example.spinner.R.id.SpinnerResult
-//	      );
-//
-//	    String resultText = (String) resultView.getText();
-//
-//	    assertEquals(resultText, mSelection);
 
-	//  } // end of testSpinnerUI() method definition)
+	   public void test2() {
 
+	      Instrumentation instrumentation = getInstrumentation();
+
+	      // Register we are interested in the authentication activiry...
+	      Instrumentation.ActivityMonitor monitor = instrumentation.addMonitor(PhoneCommunication.class.getName(), null, false);
+
+	      // Start the PhoneCommunication activity as the first activity...
+	      Intent intent = new Intent(Intent.ACTION_MAIN);
+	      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	      intent.setClassName(instrumentation.getTargetContext(), PhoneCommunication.class.getName());
+	      intent.putExtra("fb_account", "hossam.amer@facebook.com");
+	      intent.putExtra("fbId", "a999asas");
+	    	
+	    	intent.putExtra("mobile", "0101577990");
+	    	intent.putExtra("kgs", 2);
+	    	intent.putExtra("offerId", 13);
+	    	intent.putExtra("email", "hossam.amer12@gmail.com");
+	    	intent.putExtra("fullName", "Hossam Amer");
+	    	intent.putExtra("userId", "8");
+	    	intent.putExtra("user_status", 1);
+	      instrumentation.startActivitySync(intent);
+
+	      // Wait for it to start...
+	      Activity currentActivity = getInstrumentation().waitForMonitorWithTimeout(monitor, 5);
+//	      assertThat(currentActivity, is(notNullValue()));
+	      assertNotNull(currentActivity);
+
+	      // Type into the username field...
+	      
+	      Button currentButton = (Button) currentActivity.findViewById(R.id.btn_call);
+	      assertNotNull(currentButton);
+	      TouchUtils.clickView(this, currentButton);
+	      instrumentation.sendStringSync("0101577990");
+	      
+//	      Intent intent2 = new Intent()
+	      
+//	      Activity currentActivity2 = getInstrumentation().waitForMonitorWithTimeout(monitor, 5);
+	      instrumentation.startActivitySync(intent);
+//	      assertThat(currentActivity, is(notNullValue()));
+//	      assertNotNull(currentActivity);
+	      
+
+
+	      // Type into the password field...
+//	      currentView = currentActivity.findViewById(password_field);
+//	      assertThat(currentView, is(notNullValue()));
+//	      assertThat(currentView, instanceOf(EditText.class));
+//	      TouchUtils.clickView(this, currentView);
+//	      instrumentation.sendStringSync("MyPassword");
+//
+//	      // Register we are interested in the welcome activity...
+//	      // this has to be done before we do something that will send us to that
+//	      // activity...
+//	      instrumentation.removeMonitor(monitor);
+//	      monitor = instrumentation.addMonitor(WelcomeActivity.class.getName(), null, false);
+//
+//	      // Click the login button...
+//	      currentView = currentActivity.findViewById(login_button;
+//	      assertThat(currentView, is(notNullValue()));
+//	      assertThat(currentView, instanceOf(Button.class));
+//	      TouchUtils.clickView(this, currentView);
+//
+//	      // Wait for the welcome page to start...
+//	      currentActivity = getInstrumentation().waitForMonitorWithTimeout(monitor, 5);
+//	      assertThat(currentActivity, is(notNullValue()));
+//
+//	      // Make sure we are logged in...
+//	      currentView = currentActivity.findViewById(welcome_message);
+//	      assertThat(currentView, is(notNullValue()));
+//	      assertThat(currentView, instanceOf(TextView.class));
+//	      assertThat(((TextView)currentView).getText().toString(), is("Welcome, MyUsername!"));
+	   }
 }
