@@ -20,11 +20,11 @@ public class Offers extends Controller {
 	 * @return
 	 */
 	public static String view(){
-		List<Offer> flights = Offer.all(Offer.class).fetch();
+		List<Offer> offers = Offer.all(Offer.class).fetch();
 		String x = "";
-		for(int i = 0 ; i < flights.size() ; i++)
+		for(int i = 0 ; i < offers.size() ; i++)
 		{
-			x+= flights.get(i).toString()+"\n";
+			x+= offers.get(i).toString()+"\n";
 		}
 		return x;
 	}
@@ -64,7 +64,7 @@ public class Offers extends Controller {
 			
 			///////////////////////////////////////// SHOULD GET USER INFO FROM SERVER AFTER LOGIN ////////////////////////////////
 			offer.insert();
-			return "Success";
+			return "OK";
 		}
 		catch(Exception e){
 			return e.toString();
