@@ -27,10 +27,6 @@ GET		/insertuser/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nat
 GET		/insertuser/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nationality}/{passportNumber}/{gender}/{passportPhoto}									Users.insertUser
 GET /insertuser						Users.insertUser
 
-GET 	/testing 	Offers.testing
-GET 	/getofferflight/{offerId}			Offers.getOfferFlight
-
-GET		/testing2							Offers.testing2
 
 
 # Ignore favicon requests
