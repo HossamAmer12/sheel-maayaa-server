@@ -22,10 +22,10 @@ GET		/filterairportsoffers/{source}/{destination}/{date}/{userStatus}/{kgs}/{pri
 GET 	/insertflight/{flightNumber}/{source}/{destination}/{departureDate}									  Flights.insertFlight
 GET 	/getallflightnumbers/																				  Flights.getAllFlightNumbers
 
-GET		/insertuser/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nationality}/{passportNumber}/{gender}								Users.insertUser
+#GET		/insertuser/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nationality}/{passportNumber}/{gender}								Users.insertUser
 
-GET		/insertuser/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nationality}/{passportNumber}/{gender}/{passportPhoto}									Users.insertUser
-GET /insertuser						Users.insertUser
+#GET		/insertuser/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nationality}/{passportNumber}/{gender}/{passportPhoto}									Users.insertUser
+GET /insertuser						Users.registerUser
 GET /insertuser/{facebookID}/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nationality}/{passportNumber}/{gender}/{passportPhoto}									Users.insertUser
 
 
