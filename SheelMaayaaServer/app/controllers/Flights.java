@@ -8,6 +8,17 @@ import models.*;
 
 public class Flights extends Controller {
 
+	public static String view(){
+		List<Flight> flights = Flight.all(Flight.class).fetch();
+		String x = "";
+		for(int i = 0 ; i < flights.size() ; i++)
+		{
+			x+= flights.get(i).toString()+"\n";
+		}
+		return x;
+	}
+	
+	
 	public static String insertFlight(String flightNumber, String source, String destination, String departureDate){
 		try{
 			
