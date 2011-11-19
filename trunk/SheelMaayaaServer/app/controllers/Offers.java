@@ -60,7 +60,11 @@ public class Offers extends Controller {
 			
 			try{
 				if(uid!=0){
-				offer.setUser(User.getByKey(User.class, uid));}
+				offer.setUser(User.getByKey(User.class, uid));
+				}
+				else{
+					offer.setUser(User.all(User.class).get());
+				}
 			}catch(Exception e){
 			
 				offer.setUser(User.all(User.class).get());	//Assign offer to first user in the database
