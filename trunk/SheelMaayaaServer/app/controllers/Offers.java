@@ -3,6 +3,8 @@ package controllers;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import models.Flight;
@@ -160,7 +162,7 @@ public class Offers extends Controller {
 		
 		}
 	
-	public static List<Offer> offerFilterPreferences(List<Flight> flights, int userStatus, int kgs, int price, 
+	private static List<Offer> offerFilterPreferences(List<Flight> flights, int userStatus, int kgs, int price, 
 											String gender, String nationality){
 		try{
 		
@@ -171,23 +173,7 @@ public class Offers extends Controller {
 			for(int i = 0; i<flights.size();i++)
 			{
 				offers = flights.get(i).offers.filter("userStatus", userStatus); 
-				
-			/*	if(userStatus == 0){
-					if(kgs != 0)
-						offers = offers.order("noOfKilograms");
-					
-					else if(kgs == 0 && price != 0)
-						offers = offers.order("-pricePerKilogram");
-				}
-				
-				else if(userStatus == 1){
-					if(kgs != 0)
-						offers = offers.order("-noOfKilograms");
-					
-					else if(kgs == 0 && price != 0)
-						offers = offers.order("pricePerKilogram");
-				}*/
-				
+		
 				offersList.addAll(offers.fetch());
 			}
 			
@@ -196,6 +182,8 @@ public class Offers extends Controller {
 			
 			if(price != 0)
 				offersList = filterByPrice(offersList, userStatus, price);
+			
+			offersList = sortOffersByKgs(offersList, userStatus);
 			
 			if(gender.equals("both") && nationality.equals("none"))
 				return offersList;
@@ -207,7 +195,7 @@ public class Offers extends Controller {
 		}
 	}
 	
-	public static List<Offer> filterByKgs(List<Offer> offersList, int userStatus , int kgs){
+	private static List<Offer> filterByKgs(List<Offer> offersList, int userStatus , int kgs){
 		
 		try{
 			
@@ -230,7 +218,7 @@ public class Offers extends Controller {
 			return null;}
 	}
 	
-	public static List<Offer> filterByPrice(List<Offer> offersList, int userStatus , int price){
+	private static List<Offer> filterByPrice(List<Offer> offersList, int userStatus , int price){
 		
 		try{
 			
@@ -253,7 +241,7 @@ public class Offers extends Controller {
 			return null;}
 	}
 	
-	public static List<Offer> userFilterPreferences(List<Offer> offers, String gender, String nationality){
+	private static List<Offer> userFilterPreferences(List<Offer> offers, String gender, String nationality){
 		try{
 		
 			User user;
@@ -289,32 +277,41 @@ public class Offers extends Controller {
 		}
 	}
 	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-/*	if(kgs != 0){ 
-			if(userStatus == 0)
-				offers = offers.filter("noOfKilograms", kgs);
-
-			else 
-				offers = offers.filter("noOfKilograms", kgs);
+	private static List<Offer> sortOffersByKgs(List<Offer> offers, int userStatus){
+		
+		try{
+			if(userStatus == 0){
+				Collections.sort(offers, new Comparator(){ 
+					public int compare(Object o1, Object o2) {
+						Offer offer1 = (Offer) o1;
+						Offer offer2 = (Offer) o2;
+	               
+						if(offer1.noOfKilograms > offer2.noOfKilograms)
+							return 1;
+						else if(offer1.noOfKilograms < offer2.noOfKilograms)
+							return -1;
+	               
+						return 0; } });
+			}
+			
+			else{
+				Collections.sort(offers, new Comparator(){ 
+					public int compare(Object o1, Object o2) {
+						Offer offer1 = (Offer) o1;
+						Offer offer2 = (Offer) o2;
+               
+						if(offer1.noOfKilograms > offer2.noOfKilograms)
+							return -1;
+						else if(offer1.noOfKilograms < offer2.noOfKilograms)
+							return 1;
+               
+						return 0;} }); 
+				}
+			
+			return offers;
+			
+		}catch(Exception e){
+			return null;}
 	}
-	
-	if(price != 0){
-			if(userStatus == 0)
-				offers = offers.filter("pricePerKilogram", price);
-	
-			else
-				offers = offers.filter("pricePerKilogram", price);		
-	}	*/	
 	
 }
