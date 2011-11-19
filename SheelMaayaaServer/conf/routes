@@ -26,6 +26,7 @@ GET		/insertuser/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nat
 
 GET		/insertuser/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nationality}/{passportNumber}/{gender}/{passportPhoto}									Users.insertUser
 GET /insertuser						Users.insertUser
+GET /insertuser/{facebookID}/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nationality}/{passportNumber}/{gender}/{passportPhoto}									Users.insertUser
 
 
 
