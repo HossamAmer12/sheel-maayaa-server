@@ -105,65 +105,6 @@ public class Offers extends Controller {
 		}
 	}
 
-
-	public static void getOffersByFlightNumber(String flightNumber, String date, int userStatus){
-		
-		try{
-			
-			List<Flight>flights = Flights.getFlightsByFlightNumber(flightNumber, date);
-
-			List<Offer> offers = new ArrayList<Offer>();
-			
-			for(int i = 0; i<flights.size();i++)
-			{ 
-				offers.addAll(flights.get(i).offers.filter("userStatus", userStatus).fetch());	
-			}
-			
-			Offer offer;
-			
-			for(int i = 0 ; i < offers.size() ; i++){
-				
-				offer = offers.get(i);
-				
-				offer.flight.get();
-				offer.user.get();
-			}
-
-			renderJSON(offers);
-			
-		}catch(Exception e){
-			
-		}
-	}
-	
-	public static void getOffersByAirports(String source, String destination, String date, int userStatus){
-		
-		try{
-			
-			List<Flight>flights = Flights.getFlightsByAirports(source, destination, date);
-	
-			List<Offer> offers = new ArrayList<Offer>();
-			
-			for(int i = 0; i<flights.size();i++)
-			{
-				offers.addAll(flights.get(i).offers.filter("userStatus", userStatus).fetch());	
-			}
-			
-			Offer offer;
-			
-			for(int i = 0 ; i < offers.size() ; i++){
-				
-				offer = offers.get(i);
-				
-				offer.flight.get();
-				offer.user.get();
-			}
-
-			renderJSON(offers);
-			
-		}catch(Exception e){
-		}
-	}
 	
 	public static void filterFlightNumberOffers(String flightNumber, String date, int userStatus, int kgs, int price, 
 									String gender, String nationality){
