@@ -16,8 +16,6 @@ GET     /sendsms																								  Confirmations.sendSMS
 
 GET     /insertoffer/{userId}/{flightId}/{kgs}/{price}/{userStatus}										      Offers.insertOffer
 GET		/getflightoffers/{id}																		          Offers.getFlightOffers
-GET 	/getoffersbyflightnumber/{flightNumber}/{date}/{userStatus}										      Offers.getOffersByFlightNumber
-GET 	/getoffersbyairports/{source}/{destination}/{date}/{userStatus} 								      Offers.getOffersByAirports
 GET		/filterflightnumberoffers/{flightNumber}/{date}/{userStatus}/{kgs}/{price}/{gender}/{nationality}     Offers.filterFlightNumberOffers
 GET		/filterairportsoffers/{source}/{destination}/{date}/{userStatus}/{kgs}/{price}/{gender}/{nationality} Offers.filterAirportsOffers
 
@@ -29,7 +27,7 @@ GET		/insertuser/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nat
 GET		/insertuser/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nationality}/{passportNumber}/{gender}/{passportPhoto}									Users.insertUser
 GET /insertuser						Users.insertUser
 
-GET 	/testing/{gender}/{nationality} 	Offers.testing
+GET 	/testing 	Offers.testing
 GET 	/getofferflight/{offerId}			Offers.getOfferFlight
 
 GET		/testing2							Offers.testing2
