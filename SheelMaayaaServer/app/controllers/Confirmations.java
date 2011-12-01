@@ -25,6 +25,7 @@ public class Confirmations extends Controller {
 	 /**
      * @author Hossam Amer
      * Creates a confirmation inside the database.
+     * user_status 0 > Less weight (insertConfirmation2), 1 > More weight (insertConfirmation1)
      */
     
     public static synchronized String insertConfirmation(long userId, long offerId, int user_status)
@@ -118,21 +119,35 @@ public class Confirmations extends Controller {
 				
 			if(confirmation.user2.id != user.id)
 			{		
-				user.get();
-				sendMail(confirmation.user2.email, 0, user, confirmation.user2, offer);
-				sendMail(user.email, 1, user, confirmation.user2, offer);
+				// Make sure that one of the user is an offer owner
+				offer.user.get();
+				confirmation.user2.get();
+				User offerOwner = offer.user;
 				
-				confirmation.user1 = user;
-				confirmation.statusTransactionUser1 = true;
-				
-				user.confirmations1.fetch().add(confirmation);
-				
-				confirmation.save();
-				user.save();
-						
-				return "Success: 12";
-//					return "Empty: " + user.confirmations1.fetch().isEmpty() + 
-//					") Success: User1 confirms an already confirmed offer by User2";
+				if(offerOwner.id.equals(user.id) || offerOwner.id.equals(confirmation.user2.id))
+				{
+					user.get();
+					sendMail(confirmation.user2.email, 0, user, confirmation.user2, offer);
+					sendMail(user.email, 1, user, confirmation.user2, offer);
+					
+					confirmation.user1 = user;
+					confirmation.statusTransactionUser1 = true;
+					
+					user.confirmations1.fetch().add(confirmation);
+					
+					offer.offerStatus = "taken";
+					
+					offer.save();
+					confirmation.save();
+					user.save();
+							
+					return "Success: 12";
+					//	return "Empty: " + user.confirmations1.fetch().isEmpty() + 
+					//") Success: User1 confirms an already confirmed offer by User2";
+				}
+				else
+					return "Failure: Offer owner1 is not confirming the offer: offerOwnerId: " + offerOwner.id
+					+ ", UserId: " + user.id + ", ConfUser2Id: " + confirmation.user2.id;
 			}// end if(confirmation.user2.id != user.id)
 			else
 				return "Failure: The same user1 confirms the same offer!";
@@ -187,22 +202,38 @@ public class Confirmations extends Controller {
 				
 				if(confirmation.user1.id != user.id)
 				{
+					// Make sure that one of the user is an offer owner
+					offer.user.get();
+					confirmation.user1.get();
+					User offerOwner = offer.user;
+										
+					if(offer.user.id.equals(user.id) || offerOwner.id.equals(confirmation.user1.id))
+					{
 					
-				user.get();
-				sendMail(confirmation.user1.email, 0, confirmation.user1, user, offer);
-				sendMail(user.email, 1, confirmation.user1, user, offer);
-				
-				confirmation.user2 = user;
-				confirmation.statusTransactionUser2 = true;
-				
-				user.confirmations2.fetch().add(confirmation);
-				
-				confirmation.save();
-				user.save();
-				
-				return "Success: 13";
-//					return "Empty: " + user.confirmations2.fetch().isEmpty() + 
-//					") Success: User2 confirms an already confirmed offer by User1";
+						user.get();
+						sendMail(confirmation.user1.email, 0, confirmation.user1, user, offer);
+						sendMail(user.email, 1, confirmation.user1, user, offer);
+						
+						confirmation.user2 = user;
+						confirmation.statusTransactionUser2 = true;
+						
+						user.confirmations2.fetch().add(confirmation);
+						
+						offer.offerStatus = "taken";
+						
+						offer.save();
+						confirmation.save();
+						user.save();
+						
+						return "Success: 13";
+						//					return "Empty: " + user.confirmations2.fetch().isEmpty() + 
+						//					") Success: User2 confirms an already confirmed offer by User1";
+					}
+					else
+						return "Failure: Offer owner2 is not confirming the offer: OfferOwner: " + offerOwner.id   
+						+ ", User.Id: " + user.id + ", Conf.userId: " + confirmation.user1.id
+						+ ", " + (offerOwner.id == user.id) + ", " + (offerOwner.id == confirmation.user1.id)
+						+ ", " + (offerOwner.id == user.id || offerOwner.id == confirmation.user1.id);
 				}// end if(confirmation.user2.id != user.id)
 				else
 					return "Failure: The same user2 confirms the same offer!";
