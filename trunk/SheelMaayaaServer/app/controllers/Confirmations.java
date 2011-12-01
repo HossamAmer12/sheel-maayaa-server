@@ -27,12 +27,11 @@ public class Confirmations extends Controller {
      * Creates a confirmation inside the database.
      */
     
-    public static String insertConfirmation(long userId, long offerId, int user_status)
+    public static synchronized String insertConfirmation(long userId, long offerId, int user_status)
     {
     		
     		if (user_status == 1) // More weight
     		{
-    			//there is a confirmation 
     			return insertConfirmationUser1(userId, offerId);
     			
     		}// end if (user_status == 1)
@@ -95,7 +94,7 @@ public class Confirmations extends Controller {
     
     private static String insertConfirmationUser1(long userId, long offerId)
     {
-
+    
 		User user = User.getByKey(User.class, userId);
 		Offer offer = Offer.getByKey(Offer.class, offerId);
 	
@@ -122,15 +121,11 @@ public class Confirmations extends Controller {
 				user.get();
 				sendMail(confirmation.user2.email, 0, user, confirmation.user2, offer);
 				sendMail(user.email, 1, user, confirmation.user2, offer);
-				//add-on
-//				confirmation.user1.get();
 				
 				confirmation.user1 = user;
 				confirmation.statusTransactionUser1 = true;
 				
 				user.confirmations1.fetch().add(confirmation);
-				//add-on
-//				confirmation.user1.save();
 				
 				confirmation.save();
 				user.save();
@@ -158,11 +153,11 @@ public class Confirmations extends Controller {
 			return "Success: This confirmation is new!";
 //			return  e.getStackTrace().toString() + " " + e.toString() + "\n\nSuccess: This confirmation is new!";
 		}
+		
     }// end insertConfirmationUser1(long userId, long offerId)
 
     private static String insertConfirmationUser2(long userId, long offerId)
     {
-
 		User user = User.getByKey(User.class, userId);
 		Offer offer = Offer.getByKey(Offer.class, offerId);
 	
