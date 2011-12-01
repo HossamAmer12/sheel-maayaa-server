@@ -11,7 +11,6 @@ GET		/getuser1																							  Users.getUser1
 POST    /insertflight																						  Application.insertFlight
 GET     /test																								  Application.test
 GET     /insertconfirmation/{userId}/{offerId}/{user_status}											  	  Confirmations.insertConfirmation
-GET     /insertfinalconfirmation/{userId}/{offerId}/{user_status}											  	  Confirmations.insertConfirmationFinal
 GET     /sendsms																								  Confirmations.sendSMS
 
 GET     /insertoffer/{userId}/{flightId}/{kgs}/{price}/{userStatus}										      Offers.insertOffer
