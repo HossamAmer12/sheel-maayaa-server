@@ -27,7 +27,7 @@ GET 	/getallflightnumbers/																				  Flights.getAllFlightNumbers
 POST /registeruser						Users.registerUser
 GET /insertuser/{facebookID}/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nationality}/{passportNumber}/{gender}/{passportPhoto}									Users.insertUser
 
-
+GET	/getmyoffers/{facebookID}			Offers.getMyOffers
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
