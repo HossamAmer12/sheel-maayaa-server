@@ -325,7 +325,7 @@ public class Offers extends Controller {
 	}
 	
 	/**
-	 * Gets the offers declared by the user
+	 * Gets the offers declared by the user.
 	 * @param facebookID The Facebook ID of the user in the database.
 	 * @author Hossam_Amer
 	 */
