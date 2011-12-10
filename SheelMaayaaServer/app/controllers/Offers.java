@@ -332,17 +332,10 @@ public class Offers extends Controller {
 	
 	public static void getMyOffers(String facebookID){
 		
-//		List<Flight>flights = Flight.all(Flight.class).filter("source",f.source).filter("destination", f.destination)
-//		.filter("departureDate",f.departureDate).filter("flightNumber", f.flightNumber).fetch();
-		
 		User user = User.all(User.class).filter("facebookAccount", facebookID).fetch().get(0);
-		
-//		User user = (User) User.all(User.class).filter("facebookAccount", facebookID).fetch();
-		
-		List <Offer> offers = (List<Offer>) Offer.all(Offer.class).filter("user", user);
+		List <Offer> offers = (List<Offer>) Offer.all(Offer.class).filter("user", user).fetch();
 		
 		renderJSON(offers);
-		renderJSON(user);
 		
 	}
 	
