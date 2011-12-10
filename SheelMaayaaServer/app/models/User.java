@@ -12,6 +12,7 @@ import siena.Id;
 import siena.Model;
 import siena.Query;
 import siena.Table;
+import siena.Unique;
 
 /**
  * 
@@ -49,15 +50,19 @@ public class User extends Model
 		@Column("passport_number")
 	    public String passportNumber;
 		
-		//XXX	@Unique
 		@Column("email")
 	    public String email;
+		
 		@Column("mobile_number")
 	    public String mobileNumber;
+		
+		
 		@Column("facebook_account")
 	    public String facebookAccount;
+		
 		@Column("gender")
 		public String gender;
+		
 		@Column("nationality")
 		public String nationality;
 	    
