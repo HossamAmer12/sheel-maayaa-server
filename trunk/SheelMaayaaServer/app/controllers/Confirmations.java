@@ -28,17 +28,17 @@ public class Confirmations extends Controller {
      * user_status 0 > Less weight (insertConfirmation2), 1 > More weight (insertConfirmation1)
      */
     
-    public static synchronized String insertConfirmation(long userId, long offerId, int user_status)
+    public static synchronized String insertConfirmation(String facebookID, long offerId, int user_status)
     {
     		
     		if (user_status == 1) // More weight
     		{
-    			return insertConfirmationUser1(userId, offerId);
+    			return insertConfirmationUser1(facebookID, offerId);
     			
     		}// end if (user_status == 1)
     		else
     		{
-    			return insertConfirmationUser2(userId, offerId);
+    			return insertConfirmationUser2(facebookID, offerId);
     		}
     		    		
     }
@@ -93,10 +93,10 @@ public class Confirmations extends Controller {
 		}
     }
     
-    private static String insertConfirmationUser1(long userId, long offerId)
+    private static String insertConfirmationUser1(String facebookID, long offerId)
     {
     
-		User user = User.getByKey(User.class, userId);
+    	User user = User.all(User.class).filter("facebookAccount", facebookID).fetch().get(0);
 		Offer offer = Offer.getByKey(Offer.class, offerId);
 	
 		try {
@@ -171,9 +171,9 @@ public class Confirmations extends Controller {
 		
     }// end insertConfirmationUser1(long userId, long offerId)
 
-    private static String insertConfirmationUser2(long userId, long offerId)
+    private static String insertConfirmationUser2(String facebookID, long offerId)
     {
-		User user = User.getByKey(User.class, userId);
+    	User user = User.all(User.class).filter("facebookAccount", facebookID).fetch().get(0);
 		Offer offer = Offer.getByKey(Offer.class, offerId);
 	
 		try {
