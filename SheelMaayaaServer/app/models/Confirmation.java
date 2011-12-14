@@ -24,19 +24,19 @@ public class Confirmation extends Model
     	public User user2;
 		
 		/**
-		 * Indicates User confirmed first exchange of luggange
+		 * Indicates User confirmed first exchange of luggage
 		 */
 	    public boolean statusTransactionUser1; 
 	    /**
-		 * Indicates User confirmed first exchange of luggange
+		 * Indicates User confirmed first exchange of luggage
 		 */
 	    public boolean statusTransactionUser2;
 	    /**
-  		 * Indicates User confirmed second exchange of luggange
+  		 * Indicates User confirmed second exchange of luggage
   		 */
 	    public boolean statusDeliveryUser1;   
 	    /**
-  		 * Indicates User confirmed second exchange of luggange
+  		 * Indicates User confirmed second exchange of luggage
   		 */
 	    public boolean statusDeliveryUser2;
 	    
