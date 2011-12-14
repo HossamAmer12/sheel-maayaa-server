@@ -25,17 +25,20 @@ public class Offer extends Model
 
 	@Column("user_status")
     public int userStatus;  //1 for Extra weight and 0 for Less weight
+	
+	/**
+	 * OfferStatus is either "half-confirmed" or "confirmed"
+	 * 
+	 * "half-confirmed" designates for a half-confirmed offer by either 
+	 * less or more w8t users
+	 * 
+	 * "confirmed" designates for a confirmed offer by less and more w8t users
+	 */
+	
 	@Column("offer_status")
     public String offerStatus; //Open or taken or expired . . .
      //I suggest we make integer codes for these status -> Ahmed Mohsen
     
-//    @ManyToOne
-//    public Flight flight;
-//    @OneToOne
-//    public Confirmation confirmation;  
-//  @ManyToOne
-//  public User user; //offer Creator
-
     @Column("flight")
     @Cascade({CascadeType.SAVE_UPDATE})
 	public Flight flight;
@@ -44,9 +47,6 @@ public class Offer extends Model
 	@Cascade({CascadeType.SAVE_UPDATE})
     public User user; //offer Creator
   
-//	@Column("confirmation")
-//	public Confirmation confirmation;
-    
     
     //public String currency; //Will be done next sprint
     
