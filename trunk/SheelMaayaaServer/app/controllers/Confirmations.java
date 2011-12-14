@@ -135,7 +135,7 @@ public class Confirmations extends Controller {
 					
 					user.confirmations1.fetch().add(confirmation);
 					
-					offer.offerStatus = "taken";
+					offer.offerStatus = "confirmed";
 					
 					offer.save();
 					confirmation.save();
@@ -164,7 +164,9 @@ public class Confirmations extends Controller {
 		} catch (Exception e) {
 			// TODO: handle exception
 			//00
+			offer.offerStatus = "half-confirmed";
 			new Confirmation(offer, user, null, true, false, false, false).insert();
+			offer.save();
 			return "Success: This confirmation is new!";
 //			return  e.getStackTrace().toString() + " " + e.toString() + "\n\nSuccess: This confirmation is new!";
 		}
@@ -244,7 +246,9 @@ public class Confirmations extends Controller {
 		} catch (Exception e) {
 			// TODO: handle exception
 			//00
+			offer.offerStatus = "half-confirmed";
 			new Confirmation(offer, null, user, false, true, false, false).insert();
+			offer.save();
 			return "Success2: This confirmation is new!";
 		}
     }// end insertConfirmationUser2(long userId, long offerId)
