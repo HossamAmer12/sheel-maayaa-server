@@ -54,6 +54,14 @@ public class Users extends Controller {
 			return e.toString();
 			}
 		}
+	 
+	 public static String checkRegistered(String facebookID){
+		 List<User> user = User.all(User.class).filter("facebookAccount", facebookID).fetch();
+		 if(user.size() > 0){
+			 return "true";
+		 }
+		 return "false";
+	 }
 	
 
 }
