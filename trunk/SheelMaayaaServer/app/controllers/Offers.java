@@ -107,9 +107,11 @@ public class Offers extends Controller {
 		
 		try{
 
-			List<Flight>flights = Flights.getFlightsByFlightNumber(flightNumber, date);
+			List<Flight>flights = Flight.all(Flight.class)
+										.filter("flightNumber", flightNumber).filter("departureDate", date).fetch();
+	
 
-			flights = filterByDate(flights);
+			//flights = filterByDate(flights);
 			
 			List<Offer>offers = offerFilterPreferences(flights, userStatus, kgs, price, gender, nationality);
 
@@ -126,9 +128,8 @@ public class Offers extends Controller {
 			}
 			
 			renderJSON(notConfirmedOffers);
-			
+		
 		}catch(Exception e){
-			
 		}
 		
 	}
@@ -138,9 +139,10 @@ public class Offers extends Controller {
 		
 		try{
 		
-			List<Flight>flights = Flights.getFlightsByAirports(source, destination, date);
+			List<Flight>flights = Flight.all(Flight.class).filter("source", source).
+								filter("destination", destination).filter("departureDate", date).fetch();
 			
-			flights = filterByDate(flights);
+			//flights = filterByDate(flights);
 			
 			List<Offer>offers = offerFilterPreferences(flights, userStatus, kgs, price, gender, nationality);
 			
@@ -263,7 +265,7 @@ public class Offers extends Controller {
 			return null;}
 	}
 	
-	private static List<Flight> filterByDate(List<Flight> flights){
+	/*private static List<Flight> filterByDate(List<Flight> flights){
 		
 
 		final Calendar currentCal = Calendar.getInstance();
@@ -296,7 +298,7 @@ public class Offers extends Controller {
         }
         
         return filteredFlights;
-	}
+	}*/
 	
 	private static List<Offer> userFilterPreferences(List<Offer> offers, String gender, String nationality){
 		try{
