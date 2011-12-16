@@ -2,7 +2,9 @@ package controllers;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -100,24 +102,6 @@ public class Offers extends Controller {
 		}
 	}
 
-	
-	public static String getFlightOffers(long id){
-		try{
-			Flight flight = Flight.getByKey(Flight.class, id);
-			
-			String offerString = "";
-			List<Offer>offers =  flight.offers.fetch();
-			for(int i = 0; i<flight.offers.count();i++)
-			{
-				offerString +=  offers.get(i).toString();
-			}
-			return offerString;
-		}catch(Exception e){
-			return e.toString();
-		}
-	}
-
-	
 	public static void filterFlightNumberOffers(String flightNumber, String date, int userStatus, int kgs, int price, 
 									String gender, String nationality){
 		
@@ -125,19 +109,23 @@ public class Offers extends Controller {
 
 			List<Flight>flights = Flights.getFlightsByFlightNumber(flightNumber, date);
 
+			flights = filterByDate(flights);
+			
 			List<Offer>offers = offerFilterPreferences(flights, userStatus, kgs, price, gender, nationality);
 
 			Offer offer;
 			
-			for(int i = 0 ; i < offers.size() ; i++){
+			List<Offer>notConfirmedOffers = filterByOfferStatus(offers);
 				
-				offer = offers.get(i);
+			for(int i = 0 ; i < notConfirmedOffers.size() ; i++){
+				
+				offer = notConfirmedOffers.get(i);
 				
 				offer.flight.get();
 				offer.user.get();
 			}
 			
-			renderJSON(offers);
+			renderJSON(notConfirmedOffers);
 			
 		}catch(Exception e){
 			
@@ -152,25 +140,29 @@ public class Offers extends Controller {
 		
 			List<Flight>flights = Flights.getFlightsByAirports(source, destination, date);
 			
+			flights = filterByDate(flights);
+			
 			List<Offer>offers = offerFilterPreferences(flights, userStatus, kgs, price, gender, nationality);
 			
 			Offer offer;
 			
-			for(int i = 0 ; i < offers.size() ; i++){
+			List<Offer>notConfirmedOffers = filterByOfferStatus(offers);
 				
-				offer = offers.get(i);
+			for(int i = 0 ; i < notConfirmedOffers.size() ; i++){
+				
+				offer = notConfirmedOffers.get(i);
 				
 				offer.flight.get();
 				offer.user.get();
 			}
 			
-			renderJSON(offers);
+			renderJSON(notConfirmedOffers);
+			
 			
 			}catch(Exception e){
 				
 			}
-		
-		}
+	}
 	
 	private static List<Offer> offerFilterPreferences(List<Flight> flights, int userStatus, int kgs, int price, 
 											String gender, String nationality){
@@ -203,6 +195,26 @@ public class Offers extends Controller {
 		}catch(Exception e){
 				return null;
 		}
+	}
+	
+	private static List<Offer> filterByOfferStatus(List<Offer> offersList){
+		
+		try{
+
+			List<Offer> notConfirmedOffers = new ArrayList<Offer>();
+			
+			for(int i = 0 ; i < offersList.size() ; i++){
+				
+				Offer offer = offersList.get(i);
+				
+				if(!(offer.offerStatus.equals("confirmed")))
+					notConfirmedOffers.add(offer);
+			}
+			
+			return notConfirmedOffers;
+			
+		}catch(Exception e){
+			return null;}
 	}
 	
 	private static List<Offer> filterByKgs(List<Offer> offersList, int userStatus , int kgs){
@@ -249,6 +261,41 @@ public class Offers extends Controller {
 			
 		}catch(Exception e){
 			return null;}
+	}
+	
+	private static List<Flight> filterByDate(List<Flight> flights){
+		
+
+		final Calendar currentCal = Calendar.getInstance();
+		Calendar calendar = Calendar.getInstance();
+     
+        currentCal.set(currentCal.get(Calendar.YEAR), currentCal.get(Calendar.MONTH) + 1,
+        														currentCal.get(Calendar.DAY_OF_MONTH));
+        String date = "";
+        int month, day, year;
+        Flight flight;
+        List<Flight> filteredFlights = new ArrayList<Flight>();
+        
+        for(int i = 0 ; i < flights.size() ; i++){
+        	
+        	flight = flights.get(i);
+        	date = flight.departureDate;
+        	String[] temp = date.split("-");
+   
+        	if(temp.length == 3){
+	           
+        		month = Integer.parseInt(temp[0]); 
+	            day = Integer.parseInt(temp[1]); 
+	            year = Integer.parseInt(temp[2]);
+	            
+	            calendar.set(year, month, day);
+	
+	    		if(calendar.equals(currentCal) || calendar.after(currentCal))
+	    			filteredFlights.add(flight);
+    		}
+        }
+        
+        return filteredFlights;
 	}
 	
 	private static List<Offer> userFilterPreferences(List<Offer> offers, String gender, String nationality){
