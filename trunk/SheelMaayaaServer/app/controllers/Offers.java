@@ -384,6 +384,12 @@ public class Offers extends Controller {
 		User user = User.all(User.class).filter("facebookAccount", facebookID).fetch().get(0);
 		List <Offer> offers = (List<Offer>) Offer.all(Offer.class).filter("user", user).fetch();
 		
+		for (Offer offer: offers)
+		{
+			offer.user.get();
+			offer.flight.get();
+		}
+		
 		renderJSON(offers);
 		
 	}
