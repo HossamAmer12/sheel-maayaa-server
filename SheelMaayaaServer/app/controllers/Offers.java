@@ -113,18 +113,16 @@ public class Offers extends Controller {
 			List<Offer>offers = offerFilterPreferences(flights, userStatus, kgs, price, gender, nationality);
 
 			Offer offer;
-			
-			List<Offer>notConfirmedOffers = filterByOfferStatus(offers);
 				
-			for(int i = 0 ; i < notConfirmedOffers.size() ; i++){
+			for(int i = 0 ; i < offers.size() ; i++){
 				
-				offer = notConfirmedOffers.get(i);
+				offer = offers.get(i);
 				
 				offer.flight.get();
 				offer.user.get();
 			}
 			
-			renderJSON(notConfirmedOffers);
+			renderJSON(offers);
 		
 		}catch(Exception e){
 		}
@@ -142,18 +140,16 @@ public class Offers extends Controller {
 			List<Offer>offers = offerFilterPreferences(flights, userStatus, kgs, price, gender, nationality);
 			
 			Offer offer;
-			
-			List<Offer>notConfirmedOffers = filterByOfferStatus(offers);
 				
-			for(int i = 0 ; i < notConfirmedOffers.size() ; i++){
+			for(int i = 0 ; i < offers.size() ; i++){
 				
-				offer = notConfirmedOffers.get(i);
+				offer = offers.get(i);
 				
 				offer.flight.get();
 				offer.user.get();
 			}
 			
-			renderJSON(notConfirmedOffers);
+			renderJSON(offers);
 			
 			
 			}catch(Exception e){
@@ -171,7 +167,7 @@ public class Offers extends Controller {
 		
 			for(int i = 0; i<flights.size();i++)
 			{
-				offers = flights.get(i).offers.filter("userStatus", userStatus); 
+				offers = flights.get(i).offers.filter("userStatus", userStatus).filter("offerStatus", "new"); 
 		
 				offersList.addAll(offers.fetch());
 			}
@@ -192,26 +188,6 @@ public class Offers extends Controller {
 		}catch(Exception e){
 				return null;
 		}
-	}
-	
-	private static List<Offer> filterByOfferStatus(List<Offer> offersList){
-		
-		try{
-
-			List<Offer> notConfirmedOffers = new ArrayList<Offer>();
-			
-			for(int i = 0 ; i < offersList.size() ; i++){
-				
-				Offer offer = offersList.get(i);
-				
-				if(offer.offerStatus.equals("new"))
-					notConfirmedOffers.add(offer);
-			}
-			
-			return notConfirmedOffers;
-			
-		}catch(Exception e){
-			return null;}
 	}
 	
 	private static List<Offer> filterByKgs(List<Offer> offersList, int userStatus , int kgs){
