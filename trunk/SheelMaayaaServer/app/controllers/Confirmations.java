@@ -62,47 +62,73 @@ public class Confirmations extends Controller {
      * Sends mail thru the server
      */
     
-    private static void sendMail(String recepient, int user_type, User user1, User user2, Offer offer)
-    {
-    	String sender = "sheelmaaayaa@sheelmaaayaa.appspotmail.com";
-    	Properties props = new Properties();
-        Session session = Session.getDefaultInstance(props, null);
-        String msgBody  = ""; 
-        double price = offer.noOfKilograms*offer.pricePerKilogram; 
-       if(user_type == 1)
+  private static void  sendMail(String offerOwnerEmail, String offerOtherEmail, int offerStatus, User user1, User user2, Offer offer) {
+		
+        String msgBodyOfferOwner  = "";
+        String msgBodyOther  = "";
+        double price = offer.noOfKilograms*offer.pricePerKilogram;
+        
+        // More weight
+       if(offerStatus == 1)
        {  		 
-    	   msgBody = "Hello " + user1.username + ", \n\n"
+    	   msgBodyOfferOwner = "Hello " + user1.username + ", \n\n"
     	   			+ "This is an auto confirmation from Sheel M3aya app describing details of your transaction.\n\n"
     	   			+ "You have requested " +  offer.noOfKilograms + " kilograms from "  
     	   			+ user2.username +  " with " +  price +  " euros.\n\n" 
     	   			+ "Have a nice flight,\n Sheel M3aya team";
     	   
+    	   msgBodyOther = "Hello " + user2.username + ", \n\n"
+ 			+ "This is an auto confirmation from Sheel M3aya app describing details of your transaction.\n\n"
+ 			+ "You have offered " +  offer.noOfKilograms + " kilograms to " 
+ 			+ user1.username +  " with " +  price +  " euros.\n\n"  
+ 			+ "Have a nice flight,\n Sheel M3aya team";
+
+    	   
        }
        else
        {
-    	   msgBody = "Hello " + user2.username + ", \n\n"
+    	   msgBodyOfferOwner = "Hello " + user1.username + ", \n\n"
+			+ "This is an auto confirmation from Sheel M3aya app describing details of your transaction.\n\n"
+			+ "You have offered " +  offer.noOfKilograms + " kilograms to " 
+			+ user2.username +  " with " +  price +  " euros.\n\n"  
+			+ "Have a nice flight,\n Sheel M3aya team";
+    		  
+			msgBodyOther =  "Hello " + user2.username + ", \n\n"
   			+ "This is an auto confirmation from Sheel M3aya app describing details of your transaction.\n\n"
-  			+ "You have offered " +  offer.noOfKilograms + " kilograms to " 
-  			+ user1.username +  " with " +  price +  " euros.\n\n"  
-  			+ "Have a nice flight,\n Sheel M3aya team";
+  			+ "You have requested " +  offer.noOfKilograms + " kilograms from "  
+  			+ user1.username +  " with " +  price +  " euros.\n\n" 
+  			+ "Have a nice flight,\n Sheel M3aya team"; 
     	   
        }
        
+       sendMail(msgBodyOfferOwner, offerOwnerEmail);
+       sendMail(msgBodyOther, offerOtherEmail);
+       
+
+	}
+    
+    private static void sendMail(String msgBody, String recepient) {
+		// TODO Auto-generated method stub
     	try {
-    		 Message msg = new MimeMessage(session);
-             msg.setFrom(new InternetAddress(sender, "Sheel M3aya"));
-             msg.addRecipient(Message.RecipientType.TO,
-                              new InternetAddress(recepient, "Mr. User"));
-             msg.setSubject("[Sheel M3aya] Transaction has been confirmed");
-             msg.setText(msgBody);
-             Transport.send(msg);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
+        	
+    		String sender = "sheelmaaayaa@sheelmaaayaa.appspotmail.com"; 
+    		Properties props = new Properties();
+    		Session session = Session.getDefaultInstance(props, null);
+   		 	Message msg = new MimeMessage(session);
+            msg.setFrom(new InternetAddress(sender, "Sheel M3aya"));
+            msg.addRecipient(Message.RecipientType.TO,
+                             new InternetAddress(recepient, "Mr. User"));
+            msg.setSubject("[Sheel M3aya] Transaction has been confirmed");
+            msg.setText(msgBody);
+            Transport.send(msg);
+	
+    	} catch (Exception e) {
+
 			e.printStackTrace();
-			
 			renderJSON(e);
 		}
-    }
+		
+	}
     
     private static void insertConfirmationUser1(String facebookID, long offerId)
     {
@@ -134,8 +160,9 @@ public class Confirmations extends Controller {
 				confirmation.user2.get();
 				
 				user.get();
-				sendMail(confirmation.user2.email, 0, user, confirmation.user2, offer);
-				sendMail(user.email, 1, user, confirmation.user2, offer);
+				
+				sendMail(user.email, confirmation.user2.email, offer.userStatus, user, confirmation.user2, offer);
+				
 				
 				confirmation.user1 = user;
 				confirmation.statusTransactionUser1 = true;
@@ -170,8 +197,9 @@ public class Confirmations extends Controller {
 				confirmation.user1.get();
 									
 					user.get();
-					sendMail(confirmation.user1.email, 0, confirmation.user1, user, offer);
-					sendMail(user.email, 1, confirmation.user1, user, offer);
+					
+					sendMail(confirmation.user1.email, user.email, offer.userStatus, confirmation.user1, user, offer);
+					
 					
 					confirmation.user2 = user;
 					confirmation.statusTransactionUser2 = true;
@@ -235,111 +263,111 @@ public class Confirmations extends Controller {
 		
     }// end insertConfirmationUser1(long userId, long offerId)
 
-    private static void insertConfirmationUser2(String facebookID, long offerId)
-    {
-    	User user = User.all(User.class).filter("facebookAccount", facebookID).fetch().get(0);
-		Offer offer = Offer.getByKey(Offer.class, offerId);
-	
-		try {
-			
-			Confirmation confirmation = 
-				Confirmation.all(Confirmation.class).
-				filter("offer", offer).fetch().get(0);
-			
-			// 11
-			if (confirmation.getStatusTransactionUser1() 
-					&& confirmation.getStatusTransactionUser2())
-			{
-				renderJSON(alreadyConfirmed);
-//				return "Failure: This offer has been already confirmed by two users";
-			} //01
-			else if(confirmation.getStatusTransactionUser2())
-				{
-					renderJSON(notSameUser);
-//					return "Failure: User2 is confirming an already confirmed offer by " +
-//					"another User2";
-				
-				}
-			//10
-			else if (!confirmation.getStatusTransactionUser2())
-				{
-				// Make the user1 in the cache
-				confirmation.user1.get();
-				
-				if(confirmation.user1.id != user.id)
-				{
-					// Make sure that one of the user is an offer owner
-					offer.user.get();
-					confirmation.user1.get();
-					User offerOwner = offer.user;
-										
-					if(offer.user.id.equals(user.id) || offerOwner.id.equals(confirmation.user1.id))
-					{
-					
-						user.get();
-						sendMail(confirmation.user1.email, 0, confirmation.user1, user, offer);
-						sendMail(user.email, 1, confirmation.user1, user, offer);
-						
-						confirmation.user2 = user;
-						confirmation.statusTransactionUser2 = true;
-						
-						user.confirmations2.fetch().add(confirmation);
-						
-						offer.get();
-						offer.offerStatus = "taken";
-						
-						offer.save();
-						confirmation.save();
-						user.save();
-				
-						//Get everything about the confirmation
-						confirmation.user1.get();
-						confirmation.user2.get();
-						confirmation.offer.get();
-								
-						renderJSON(confirmation);
-
-//						return "Success: 13";
-						//					return "Empty: " + user.confirmations2.fetch().isEmpty() + 
-						//					") Success: User2 confirms an already confirmed offer by User1";
-					}
-					else
-						renderJSON(notFromOfferOwner);
-//						return "Failure: Offer owner2 is not confirming the offer: OfferOwner: " + offerOwner.id   
-//						+ ", User.Id: " + user.id + ", Conf.userId: " + confirmation.user1.id
-//						+ ", " + (offerOwner.id == user.id) + ", " + (offerOwner.id == confirmation.user1.id)
-//						+ ", " + (offerOwner.id == user.id || offerOwner.id == confirmation.user1.id);
-				}// end if(confirmation.user2.id != user.id)
-				else
-					renderJSON(notSameUser);
-//					return "Failure: The same user2 confirms the same offer!";
-				}
-			
-			renderJSON("");
-//			return "Weired from user2";
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-			//00
-			offer.get();
-			offer.offerStatus = "half-confirmed";
-			offer.save();
-			Confirmation confirmation = new Confirmation(offer, null, user, false, true, false, false);
-			
-			confirmation.insert();
-			
-			//Get everything about the confirmation
-			confirmation.user2.get();
-			confirmation.offer.get();
-			confirmation.offer.flight.get();
-			
-					
-			renderJSON(confirmation);
-
-//			return "Success2: This confirmation is new!";
-		}
-    }// end insertConfirmationUser2(long userId, long offerId)
-    
+//    private static void insertConfirmationUser2(String facebookID, long offerId)
+//    {
+//    	User user = User.all(User.class).filter("facebookAccount", facebookID).fetch().get(0);
+//		Offer offer = Offer.getByKey(Offer.class, offerId);
+//	
+//		try {
+//			
+//			Confirmation confirmation = 
+//				Confirmation.all(Confirmation.class).
+//				filter("offer", offer).fetch().get(0);
+//			
+//			// 11
+//			if (confirmation.getStatusTransactionUser1() 
+//					&& confirmation.getStatusTransactionUser2())
+//			{
+//				renderJSON(alreadyConfirmed);
+////				return "Failure: This offer has been already confirmed by two users";
+//			} //01
+//			else if(confirmation.getStatusTransactionUser2())
+//				{
+//					renderJSON(notSameUser);
+////					return "Failure: User2 is confirming an already confirmed offer by " +
+////					"another User2";
+//				
+//				}
+//			//10
+//			else if (!confirmation.getStatusTransactionUser2())
+//				{
+//				// Make the user1 in the cache
+//				confirmation.user1.get();
+//				
+//				if(confirmation.user1.id != user.id)
+//				{
+//					// Make sure that one of the user is an offer owner
+//					offer.user.get();
+//					confirmation.user1.get();
+//					User offerOwner = offer.user;
+//										
+//					if(offer.user.id.equals(user.id) || offerOwner.id.equals(confirmation.user1.id))
+//					{
+//					
+//						user.get();
+//						sendMail(confirmation.user1.email, 0, confirmation.user1, user, offer);
+//						sendMail(user.email, 1, confirmation.user1, user, offer);
+//						
+//						confirmation.user2 = user;
+//						confirmation.statusTransactionUser2 = true;
+//						
+//						user.confirmations2.fetch().add(confirmation);
+//						
+//						offer.get();
+//						offer.offerStatus = "taken";
+//						
+//						offer.save();
+//						confirmation.save();
+//						user.save();
+//				
+//						//Get everything about the confirmation
+//						confirmation.user1.get();
+//						confirmation.user2.get();
+//						confirmation.offer.get();
+//								
+//						renderJSON(confirmation);
+//
+////						return "Success: 13";
+//						//					return "Empty: " + user.confirmations2.fetch().isEmpty() + 
+//						//					") Success: User2 confirms an already confirmed offer by User1";
+//					}
+//					else
+//						renderJSON(notFromOfferOwner);
+////						return "Failure: Offer owner2 is not confirming the offer: OfferOwner: " + offerOwner.id   
+////						+ ", User.Id: " + user.id + ", Conf.userId: " + confirmation.user1.id
+////						+ ", " + (offerOwner.id == user.id) + ", " + (offerOwner.id == confirmation.user1.id)
+////						+ ", " + (offerOwner.id == user.id || offerOwner.id == confirmation.user1.id);
+//				}// end if(confirmation.user2.id != user.id)
+//				else
+//					renderJSON(notSameUser);
+////					return "Failure: The same user2 confirms the same offer!";
+//				}
+//			
+//			renderJSON("");
+////			return "Weired from user2";
+//			
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//			//00
+//			offer.get();
+//			offer.offerStatus = "half-confirmed";
+//			offer.save();
+//			Confirmation confirmation = new Confirmation(offer, null, user, false, true, false, false);
+//			
+//			confirmation.insert();
+//			
+//			//Get everything about the confirmation
+//			confirmation.user2.get();
+//			confirmation.offer.get();
+//			confirmation.offer.flight.get();
+//			
+//					
+//			renderJSON(confirmation);
+//
+////			return "Success2: This confirmation is new!";
+//		}
+//    }// end insertConfirmationUser2(long userId, long offerId)
+//    
 }// end class Confirmations
 
 
