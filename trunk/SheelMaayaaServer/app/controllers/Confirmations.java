@@ -27,18 +27,27 @@ public class Confirmations extends Controller {
      * Creates a confirmation inside the database.
      * user_status 0 > Less weight (insertConfirmation2), 1 > More weight (insertConfirmation1)
      */
-    
-    public static synchronized String insertConfirmation(String facebookID, long offerId, int user_status)
+	
+	/**
+	 * Confirmation Statuses
+	 */
+	
+	private final static String alreadyConfirmed = "alreadyConfirmed";
+	private final static String notFromOfferOwner = "notFromOfferOwner";
+	private final static String notSameUser = "notSameUser";
+	private final static String confirmedByAnotherPerson = "confirmedByAnotherPerson";
+	
+    public static synchronized void insertConfirmation(String facebookID, long offerId, int user_status)
     {
     		
     		if (user_status == 1) // More weight
     		{
-    			return insertConfirmationUser1(facebookID, offerId);
+    			insertConfirmationUser1(facebookID, offerId);
     			
     		}// end if (user_status == 1)
     		else
     		{
-    			return insertConfirmationUser2(facebookID, offerId);
+    			insertConfirmationUser2(facebookID, offerId);
     		}
     		    		
     }
@@ -93,7 +102,7 @@ public class Confirmations extends Controller {
 		}
     }
     
-    private static String insertConfirmationUser1(String facebookID, long offerId)
+    private static void insertConfirmationUser1(String facebookID, long offerId)
     {
     
     	User user = User.all(User.class).filter("facebookAccount", facebookID).fetch().get(0);
@@ -109,7 +118,8 @@ public class Confirmations extends Controller {
 			if (confirmation.getStatusTransactionUser1() 
 					&& confirmation.getStatusTransactionUser2())
 			{
-				return "Failure: This offer has been already confirmed by two users";
+				renderJSON(alreadyConfirmed);
+//				return "Failure: This offer has been already confirmed by two users";
 			} //01
 			else if(!confirmation.getStatusTransactionUser1())
 				{
@@ -135,45 +145,68 @@ public class Confirmations extends Controller {
 					
 					user.confirmations1.fetch().add(confirmation);
 					
+					offer.get();
 					offer.offerStatus = "confirmed";
 					
 					offer.save();
 					confirmation.save();
 					user.save();
-							
-					return "Success: 12";
+					
+					//Get everything about the confirmation
+					confirmation.user1.get();
+					confirmation.user2.get();
+					confirmation.offer.get();
+					confirmation.offer.flight.get();		
+					
+					renderJSON(confirmation);
+//					return "Success: 12";
 					//	return "Empty: " + user.confirmations1.fetch().isEmpty() + 
 					//") Success: User1 confirms an already confirmed offer by User2";
 				}
 				else
-					return "Failure: Offer owner1 is not confirming the offer: offerOwnerId: " + offerOwner.id
-					+ ", UserId: " + user.id + ", ConfUser2Id: " + confirmation.user2.id;
+					renderJSON(notFromOfferOwner);
+//					return "Failure: Offer owner1 is not confirming the offer: offerOwnerId: " + offerOwner.id
+//					+ ", UserId: " + user.id + ", ConfUser2Id: " + confirmation.user2.id;
 			}// end if(confirmation.user2.id != user.id)
 			else
-				return "Failure: The same user1 confirms the same offer!";
+				renderJSON(notSameUser);
+//				return "Failure: The same user1 confirms the same offer!";
 			}
 			//10
 			else if (confirmation.getStatusTransactionUser1())
 				{
-					return "Failure: User1 is confirming an already confirmed offer by " +
-							"another User1";
+					renderJSON(confirmedByAnotherPerson);
+//					return "Failure: User1 is confirming an already confirmed offer by " +
+//							"another User1";
 				}
 			
-			return "Weired from user1";
+			renderJSON("");
+//			return "Weired from user1";
 			
 		} catch (Exception e) {
 			// TODO: handle exception
 			//00
+			offer.get();
 			offer.offerStatus = "half-confirmed";
-			new Confirmation(offer, user, null, true, false, false, false).insert();
 			offer.save();
-			return "Success: This confirmation is new!";
+			Confirmation confirmation = new Confirmation(offer, user, null, true, false, false, false);
+			
+			confirmation.insert();
+
+			//Get everything about the confirmation
+			confirmation.user1.get();
+			confirmation.offer.get();
+			confirmation.offer.flight.get();
+			
+			renderJSON(confirmation);
+			
+//			return "Success: This confirmation is new!";
 //			return  e.getStackTrace().toString() + " " + e.toString() + "\n\nSuccess: This confirmation is new!";
 		}
 		
     }// end insertConfirmationUser1(long userId, long offerId)
 
-    private static String insertConfirmationUser2(String facebookID, long offerId)
+    private static void insertConfirmationUser2(String facebookID, long offerId)
     {
     	User user = User.all(User.class).filter("facebookAccount", facebookID).fetch().get(0);
 		Offer offer = Offer.getByKey(Offer.class, offerId);
@@ -188,12 +221,14 @@ public class Confirmations extends Controller {
 			if (confirmation.getStatusTransactionUser1() 
 					&& confirmation.getStatusTransactionUser2())
 			{
-				return "Failure: This offer has been already confirmed by two users";
+				renderJSON(alreadyConfirmed);
+//				return "Failure: This offer has been already confirmed by two users";
 			} //01
 			else if(confirmation.getStatusTransactionUser2())
 				{
-					return "Failure: User2 is confirming an already confirmed offer by " +
-					"another User2";
+					renderJSON(notSameUser);
+//					return "Failure: User2 is confirming an already confirmed offer by " +
+//					"another User2";
 				
 				}
 			//10
@@ -221,35 +256,58 @@ public class Confirmations extends Controller {
 						
 						user.confirmations2.fetch().add(confirmation);
 						
+						offer.get();
 						offer.offerStatus = "taken";
 						
 						offer.save();
 						confirmation.save();
 						user.save();
-						
-						return "Success: 13";
+				
+						//Get everything about the confirmation
+						confirmation.user1.get();
+						confirmation.user2.get();
+						confirmation.offer.get();
+								
+						renderJSON(confirmation);
+
+//						return "Success: 13";
 						//					return "Empty: " + user.confirmations2.fetch().isEmpty() + 
 						//					") Success: User2 confirms an already confirmed offer by User1";
 					}
 					else
-						return "Failure: Offer owner2 is not confirming the offer: OfferOwner: " + offerOwner.id   
-						+ ", User.Id: " + user.id + ", Conf.userId: " + confirmation.user1.id
-						+ ", " + (offerOwner.id == user.id) + ", " + (offerOwner.id == confirmation.user1.id)
-						+ ", " + (offerOwner.id == user.id || offerOwner.id == confirmation.user1.id);
+						renderJSON(notFromOfferOwner);
+//						return "Failure: Offer owner2 is not confirming the offer: OfferOwner: " + offerOwner.id   
+//						+ ", User.Id: " + user.id + ", Conf.userId: " + confirmation.user1.id
+//						+ ", " + (offerOwner.id == user.id) + ", " + (offerOwner.id == confirmation.user1.id)
+//						+ ", " + (offerOwner.id == user.id || offerOwner.id == confirmation.user1.id);
 				}// end if(confirmation.user2.id != user.id)
 				else
-					return "Failure: The same user2 confirms the same offer!";
+					renderJSON(notSameUser);
+//					return "Failure: The same user2 confirms the same offer!";
 				}
 			
-			return "Weired from user2";
+			renderJSON("");
+//			return "Weired from user2";
 			
 		} catch (Exception e) {
 			// TODO: handle exception
 			//00
+			offer.get();
 			offer.offerStatus = "half-confirmed";
-			new Confirmation(offer, null, user, false, true, false, false).insert();
 			offer.save();
-			return "Success2: This confirmation is new!";
+			Confirmation confirmation = new Confirmation(offer, null, user, false, true, false, false);
+			
+			confirmation.insert();
+			
+			//Get everything about the confirmation
+			confirmation.user2.get();
+			confirmation.offer.get();
+			confirmation.offer.flight.get();
+			
+					
+			renderJSON(confirmation);
+
+//			return "Success2: This confirmation is new!";
 		}
     }// end insertConfirmationUser2(long userId, long offerId)
     
