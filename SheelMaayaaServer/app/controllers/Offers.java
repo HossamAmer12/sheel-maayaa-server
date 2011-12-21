@@ -109,10 +109,7 @@ public class Offers extends Controller {
 
 			List<Flight>flights = Flight.all(Flight.class)
 										.filter("flightNumber", flightNumber).filter("departureDate", date).fetch();
-	
 
-			//flights = filterByDate(flights);
-			
 			List<Offer>offers = offerFilterPreferences(flights, userStatus, kgs, price, gender, nationality);
 
 			Offer offer;
@@ -141,8 +138,6 @@ public class Offers extends Controller {
 		
 			List<Flight>flights = Flight.all(Flight.class).filter("source", source).
 								filter("destination", destination).filter("departureDate", date).fetch();
-			
-			//flights = filterByDate(flights);
 			
 			List<Offer>offers = offerFilterPreferences(flights, userStatus, kgs, price, gender, nationality);
 			
@@ -209,7 +204,7 @@ public class Offers extends Controller {
 				
 				Offer offer = offersList.get(i);
 				
-				if(!(offer.offerStatus.equals("confirmed")))
+				if(offer.offerStatus.equals("new"))
 					notConfirmedOffers.add(offer);
 			}
 			
@@ -265,40 +260,6 @@ public class Offers extends Controller {
 			return null;}
 	}
 	
-	/*private static List<Flight> filterByDate(List<Flight> flights){
-		
-
-		final Calendar currentCal = Calendar.getInstance();
-		Calendar calendar = Calendar.getInstance();
-     
-        currentCal.set(currentCal.get(Calendar.YEAR), currentCal.get(Calendar.MONTH) + 1,
-        														currentCal.get(Calendar.DAY_OF_MONTH));
-        String date = "";
-        int month, day, year;
-        Flight flight;
-        List<Flight> filteredFlights = new ArrayList<Flight>();
-        
-        for(int i = 0 ; i < flights.size() ; i++){
-        	
-        	flight = flights.get(i);
-        	date = flight.departureDate;
-        	String[] temp = date.split("-");
-   
-        	if(temp.length == 3){
-	           
-        		month = Integer.parseInt(temp[0]); 
-	            day = Integer.parseInt(temp[1]); 
-	            year = Integer.parseInt(temp[2]);
-	            
-	            calendar.set(year, month, day);
-	
-	    		if(calendar.equals(currentCal) || calendar.after(currentCal))
-	    			filteredFlights.add(flight);
-    		}
-        }
-        
-        return filteredFlights;
-	}*/
 	
 	private static List<Offer> userFilterPreferences(List<Offer> offers, String gender, String nationality){
 		try{
