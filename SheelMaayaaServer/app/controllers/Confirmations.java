@@ -1,6 +1,7 @@
 package controllers;
 
 import models.Confirmation;
+import models.Flight;
 import models.Offer;
 import models.User;
 
@@ -34,6 +35,8 @@ public class Confirmations extends Controller {
 	
 	private final static String alreadyConfirmed = "alreadyConfirmed";
 	private final static String confirmedByAnotherPerson = "confirmedByAnotherPerson";
+	public final static String half_confirmed_offerOwner = "half_confirmed_1";
+	public final static String half_confirmed_offerOther = "half_confirmed_2";
 	
     public static synchronized void insertConfirmation(String facebookID, long offerId)
     {
@@ -50,7 +53,8 @@ public class Confirmations extends Controller {
      * Sends mail thru the server
      */
     
-  private static void  sendMail(String offerOwnerEmail, String offerOtherEmail, int offerStatus, User user1, User user2, Offer offer) {
+  private static void  sendMail(String offerOwnerEmail, String offerOtherEmail, int offerStatus, User user1, 
+		  User user2, Offer offer, Flight flight) {
 		
         String msgBodyOfferOwner  = "";
         String msgBodyOther  = "";
@@ -62,13 +66,15 @@ public class Confirmations extends Controller {
     	   msgBodyOfferOwner = "Hello " + user1.username + ", \n\n"
     	   			+ "This is an auto confirmation from Sheel M3aya app describing details of your transaction.\n\n"
     	   			+ "You have requested " +  offer.noOfKilograms + " kilograms from "  
-    	   			+ user2.username +  " with " +  price +  " euros.\n\n" 
+    	   			+ user2.username +  " with " +  price +  " euros on flight " + flight.getFlightNumber() + " and date: " 
+    	   			+ flight.getDepartureDate() + ".\n\n" 
     	   			+ "Have a nice flight,\n Sheel M3aya team";
     	   
     	   msgBodyOther = "Hello " + user2.username + ", \n\n"
  			+ "This is an auto confirmation from Sheel M3aya app describing details of your transaction.\n\n"
  			+ "You have offered " +  offer.noOfKilograms + " kilograms to " 
- 			+ user1.username +  " with " +  price +  " euros.\n\n"  
+ 			+ user1.username +  " with " +  price +  " euros on flight " + flight.getFlightNumber() + " and date: " 
+   			+ flight.getDepartureDate() + ".\n\n"  
  			+ "Have a nice flight,\n Sheel M3aya team";
 
     	   
@@ -78,13 +84,15 @@ public class Confirmations extends Controller {
     	   msgBodyOfferOwner = "Hello " + user1.username + ", \n\n"
 			+ "This is an auto confirmation from Sheel M3aya app describing details of your transaction.\n\n"
 			+ "You have offered " +  offer.noOfKilograms + " kilograms to " 
-			+ user2.username +  " with " +  price +  " euros.\n\n"  
+			+ user2.username +  " with " +  price +  " euros on flight " + flight.getFlightNumber() + " and date: " 
+   			+ flight.getDepartureDate() + ".\n\n"  
 			+ "Have a nice flight,\n Sheel M3aya team";
     		  
 			msgBodyOther =  "Hello " + user2.username + ", \n\n"
   			+ "This is an auto confirmation from Sheel M3aya app describing details of your transaction.\n\n"
   			+ "You have requested " +  offer.noOfKilograms + " kilograms from "  
-  			+ user1.username +  " with " +  price +  " euros.\n\n" 
+  			+ user1.username +  " with " +  price +  " euros on flight " + flight.getFlightNumber() + " and date: " 
+   			+ flight.getDepartureDate() + ".\n\n" 
   			+ "Have a nice flight,\n Sheel M3aya team"; 
     	   
        }
@@ -148,8 +156,9 @@ public class Confirmations extends Controller {
 				confirmation.user2.get();
 				
 				user.get();
+				offer.flight.get();
 				
-				sendMail(user.email, confirmation.user2.email, offer.userStatus, user, confirmation.user2, offer);
+				sendMail(user.email, confirmation.user2.email, offer.userStatus, user, confirmation.user2, offer, offer.flight);
 				
 				
 				confirmation.user1 = user;
@@ -185,8 +194,9 @@ public class Confirmations extends Controller {
 				confirmation.user1.get();
 									
 					user.get();
+					offer.flight.get();
 					
-					sendMail(confirmation.user1.email, user.email, offer.userStatus, confirmation.user1, user, offer);
+					sendMail(confirmation.user1.email, user.email, offer.userStatus, confirmation.user1, user, offer, offer.flight);
 					
 					
 					confirmation.user2 = user;
@@ -221,20 +231,25 @@ public class Confirmations extends Controller {
 		} catch (Exception e) {
 			// TODO: handle exception
 			//00
-			offer.get();
-			offer.offerStatus = "half-confirmed";
-			offer.save();
-		
+						
 			Confirmation confirmation;
 			
 		if(offerOwner.id == user.id)	
 			{
+				offer.get();
+				offer.offerStatus = half_confirmed_offerOwner;
+				offer.save();
+				
 				confirmation = new Confirmation(offer, user, null, true, false, false, false);
 				confirmation.insert();
 				confirmation.user1.get();
 			}
 		else
 		{
+			offer.get();
+			offer.offerStatus = half_confirmed_offerOther;
+			offer.save();
+			
 			confirmation = new Confirmation(offer, null, user, false, true, false, false);
 			confirmation.insert();
 			confirmation.user2.get();
