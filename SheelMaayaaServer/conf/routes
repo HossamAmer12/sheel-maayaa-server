@@ -30,7 +30,7 @@ POST /registeruser						Users.registerUser
 GET /insertuser/{facebookID}/{email}/{firstName}/{middleName}/{lastName}/{mobileNumber}/{nationality}/{passportNumber}/{gender}/{passportPhoto}									Users.insertUser
 GET /checkRegistered/{facebookID}		Users.checkRegistered
 GET	/getmyoffers/{facebookID}			Offers.getMyOffers
-
+GET	/test123/{fb}			Offers.test123
 # Ignore favicon requests
 GET     /favicon.ico                            404
 
