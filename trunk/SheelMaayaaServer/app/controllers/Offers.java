@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import models.Confirmation;
 import models.Flight;
 import models.Offer;
 import models.User;
@@ -417,6 +418,13 @@ public class Offers extends Controller {
 	
 	/**
 	 * Gets the offers declared by the user.
+	 * 
+	 * Offers of type:
+	 * - New offers I declared
+	 * - Half confirmed offers I declared (I am Offer owner)
+	 * - Half confirmed offers I confirmed but not declared by me
+	 * 	(I am not offer owner)
+	 * 
 	 * @param facebookID The Facebook ID of the user in the database.
 	 * @author Hossam_Amer
 	 */
@@ -424,7 +432,10 @@ public class Offers extends Controller {
 	public static void getMyOffers(String facebookID){
 		
 		User user = User.all(User.class).filter("facebookAccount", facebookID).fetch().get(0);
+		List <Offer> offersTemp = getAllOffersHalfConfirmedByMeNotDeclaredByMe(user);
 		List <Offer> offers = (List<Offer>) Offer.all(Offer.class).filter("user", user).fetch();
+		
+		offers.addAll(offersTemp);
 		
 		for (Offer offer: offers)
 		{
@@ -433,7 +444,93 @@ public class Offers extends Controller {
 		}
 		
 		renderJSON(offers);
-		
 	}
 	
-}
+	/**
+	 * 
+	 * @param user User logged in on Sheel Ma3aya
+	 * @return Offers confirmed by me and declared by another user.
+	 * @author Hossam_Amer
+	 */
+
+	private static List<Offer> 
+	getAllOffersHalfConfirmedByMeNotDeclaredByMe (User user) 
+	{
+	
+		List <Confirmation> confirmations = new ArrayList<Confirmation>();
+		try
+		{
+			confirmations =  (List<Confirmation>) 
+				Confirmation.all(Confirmation.class).fetch();
+		}
+		catch (Exception e) {
+			return new ArrayList<Offer>();
+		}
+		
+		List<Offer> offers = new ArrayList<Offer>(); 
+		
+			for (Confirmation confirmation: confirmations)
+			{
+				try
+				{
+					confirmation.user2.get();
+				
+						// If I am not offer owner + I confirmed this offer	
+					if(confirmation.user2.id.
+							equals(user.id))
+					{
+						confirmation.offer.get();
+						offers.add(confirmation.offer);
+					}//end if
+				}//end try
+				catch (Exception e) {
+					// TODO: handle exception
+					continue;
+				}// end catch	
+			}// end for (Confirmation confirmation: confirmations)
+		
+		return offers;
+	}// end getAllOffersHalfConfirmedByMeNotDeclaredByMe
+	
+	
+	public static void 
+	test123 (String fb) 
+	{
+	
+		User user = User.all(User.class).filter("facebookAccount", fb).fetch().get(0);
+		List <Confirmation> confirmations = new ArrayList<Confirmation>();
+		try
+		{
+			confirmations =  (List<Confirmation>) 
+				Confirmation.all(Confirmation.class).fetch();
+		}
+		catch (Exception e) {
+			renderJSON(new ArrayList<Offer>());
+		}
+		
+		List<Offer> offers = new ArrayList<Offer>(); 
+		
+			for (Confirmation confirmation: confirmations)
+			{
+				try
+				{
+					confirmation.user2.get();
+				
+						// If I am not offer owner + I confirmed this offer	
+					if(confirmation.user2.id.
+							equals(user.id))
+					{
+						confirmation.offer.get();
+						offers.add(confirmation.offer);
+					}//end if
+				}//end try
+				catch (Exception e) {
+					// TODO: handle exception
+					continue;
+				}// end catch	
+			}// end for (Confirmation confirmation: confirmations)
+		
+		renderJSON(offers);
+	}// end getAllOffersHalfConfirmedByMeNotDeclaredByMe
+	
+}//end class Offers
