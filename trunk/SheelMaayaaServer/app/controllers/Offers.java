@@ -32,7 +32,36 @@ public class Offers extends Controller {
 		}
 		return x;
 	}
+	/**
+	 * @author mohsen
+	 * @changes offer status to DEACTIVATED if applicable
+	 */
+	public static String deactivateOffer(){
+		 
+		try{
+			BufferedReader br = new BufferedReader(new InputStreamReader(request.body));
+			String input = br.readLine();
+			long offerId = Integer.parseInt(input);
+			Offer offer = Offer.getByKey(Offer.class, offerId);
+			if(offer.offerStatus.equals("NEW")){
+				offer.setOfferStatus("DEACTIVATED");
+				offer.save();
+				return "OK";
+			}
+			else{
+				return "Cannot deactivate offer";
+			}
+		}catch(Exception e){
+			return e.toString();
+		}
+	}
 	
+	/**
+	 * @Author Mohsen
+	 * @param uid
+	 * @return OK for success, and an exception for failure
+	 * Gets its offer and flight information (JSON) over HTTP-POST for security.
+	 */
 	public static String insertNewOffer(long uid){
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(request.body));
