@@ -9,7 +9,7 @@ GET     /                                     				    										  	  Application
 POST    /insertnewoffer/{uid}																						  Offers.insertNewOffer
 GET		/getuser1																							  Users.getUser1
 POST    /insertflight																						  Application.insertFlight
-POST	/deactivateoffer/																						Offers.deactivateOffer
+POST	/deactivateoffer/{x}																						Offers.deactivateOffer
 GET     /test																								  Application.test
 GET     /insertconfirmation/{facebookID}/{offerId}											  	  Confirmations.insertConfirmation
 GET     /sendsms																								  Confirmations.sendSMS
