@@ -36,15 +36,15 @@ public class Offers extends Controller {
 	 * @author mohsen
 	 * @changes offer status to DEACTIVATED if applicable
 	 */
-	public static String deactivateOffer(){
+	public static String deactivateOffer(String x){
 		 
 		try{
 			BufferedReader br = new BufferedReader(new InputStreamReader(request.body));
 			String input = br.readLine();
 			long offerId = Integer.parseInt(input);
 			Offer offer = Offer.getByKey(Offer.class, offerId);
-			if(offer.offerStatus.equals("NEW")){
-				offer.setOfferStatus("DEACTIVATED");
+			if(offer.offerStatus.equals("new")){
+				offer.setOfferStatus("deactivated");
 				offer.save();
 				return "OK";
 			}
