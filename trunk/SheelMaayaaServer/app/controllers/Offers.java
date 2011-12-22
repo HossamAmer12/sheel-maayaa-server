@@ -131,6 +131,11 @@ public class Offers extends Controller {
 		}
 	}
 
+
+	/**
+	 * Search offers with a given flight number, date
+	 * @author Magued
+	 */
 	public static void filterFlightNumberOffers(String flightNumber, String date, int userStatus, int kgs, int price, 
 									String gender, String nationality){
 		
@@ -158,6 +163,10 @@ public class Offers extends Controller {
 		
 	}
 	
+	/**
+	 * Search offers with a given source, destination, date
+	 * @author Magued
+	 */
 	public static void filterAirportsOffers(String source, String destination, String date, int userStatus, int kgs, 
 										int price, String gender, String nationality){
 		
@@ -186,6 +195,10 @@ public class Offers extends Controller {
 			}
 	}
 	
+	/**
+	 * Filters offers with a given userStatus, kgs, price
+	 * @author Magued
+	 */
 	private static List<Offer> offerFilterPreferences(List<Flight> flights, int userStatus, int kgs, int price, 
 											String gender, String nationality){
 		try{
@@ -219,6 +232,10 @@ public class Offers extends Controller {
 		}
 	}
 	
+	/**
+	 * Filters offers with a given kgs
+	 * @author Magued
+	 */
 	private static List<Offer> filterByKgs(List<Offer> offersList, int userStatus , int kgs){
 		
 		try{
@@ -242,6 +259,10 @@ public class Offers extends Controller {
 			return null;}
 	}
 	
+	/**
+	 * Filters offers with a given price
+	 * @author Magued
+	 */
 	private static List<Offer> filterByPrice(List<Offer> offersList, int userStatus , int price){
 		
 		try{
@@ -265,7 +286,10 @@ public class Offers extends Controller {
 			return null;}
 	}
 	
-	
+	/**
+	 * Filters offers with a given gender, nationality
+	 * @author Magued
+	 */
 	private static List<Offer> userFilterPreferences(List<Offer> offers, String gender, String nationality){
 		try{
 		
@@ -302,6 +326,10 @@ public class Offers extends Controller {
 		}
 	}
 	
+	/**
+	 * Sorts offers according to kgs
+	 * @author Magued
+	 */
 	private static List<Offer> sortOffersByKgs(List<Offer> offers, int userStatus){
 		
 		try{
