@@ -111,7 +111,7 @@ public class Offers extends Controller {
 	 * @return OK for success, and an exception for failure
 	 * Gets its offer and flight information (JSON) over HTTP-POST for security.
 	 */
-	public static String insertNewOffer(long uid){
+	public static String insertNewOffer(String uid){
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(request.body));
 		
@@ -139,8 +139,8 @@ public class Offers extends Controller {
 			///////////////////////////////////////// SHOULD GET USER INFO FROM SERVER AFTER LOGIN ////////////////////////////////
 			
 			try{
-				if(uid!=0){
-				offer.setUser(User.getByKey(User.class, uid));
+				if(!uid.equals("0")){
+				offer.setUser(User.all(User.class).filter("facebookAccount", uid).fetch().get(0));
 				}
 				else{
 					offer.setUser(User.all(User.class).get());
