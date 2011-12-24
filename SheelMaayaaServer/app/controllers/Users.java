@@ -33,7 +33,7 @@ public class Users extends Controller {
 		User user = new User("", firstName, middleName, lastName, passportPhoto, passportNumber, email, mobileNumber, facebookID, gender, nationality);
 		user.insert();
 		Long ID = user.id;
-		return ID.toString();
+		return "Successs";
 		}catch(Exception e){
 		return e.toString();
 		}
