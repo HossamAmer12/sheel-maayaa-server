@@ -1,5 +1,17 @@
 package com.sheel.app.test;
 
+import static com.sheel.utils.SheelMaayaaConstants.HTTP_REGISTER_USER;
+import static com.sheel.utils.SheelMaayaaConstants.HTTP_CHECK_REGISTERED;
+
+import java.io.IOException;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+
 import android.graphics.drawable.Drawable;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.AutoCompleteTextView;
@@ -12,6 +24,8 @@ import android.widget.ToggleButton;
 
 import com.sheel.app.NewUserActivity;
 import com.sheel.app.R;
+import com.sheel.datastructures.User;
+import com.sheel.utils.HTTPManager;
 
 
 
@@ -19,6 +33,7 @@ public class NewUserTest extends
 ActivityInstrumentationTestCase2<NewUserActivity> {
 
 	NewUserActivity myActivity;
+	private String server = "http://www.sheelmaaayaa.appspot.com";
 	
 	TextView required;
 	TextView countryCode;
@@ -50,6 +65,12 @@ ActivityInstrumentationTestCase2<NewUserActivity> {
 	String passportNumberString;
 	String passportPhotoString;
 	String registerString;
+	
+	String path;
+	String response;
+	
+	DefaultHttpClient client = new DefaultHttpClient();
+	
 
 public NewUserTest(){
 		
@@ -125,5 +146,45 @@ public void testText() {
       
 }
 
+public void checkRegisteredTest(){
+try {
+	
+		
+	path = "/checkRegistered/509885099";
+	HTTPManager.startHttpService(path, HTTP_CHECK_REGISTERED, myActivity.getApplicationContext());
+	HttpResponse resp = client.execute(new HttpGet(server + path));
+	response = EntityUtils.toString(resp.getEntity());
+	assertEquals("true", response);
+	
+	path = "/checkRegistered/1000547392";
+	HTTPManager.startHttpService(path, HTTP_CHECK_REGISTERED, myActivity.getApplicationContext());
+	resp = client.execute(new HttpGet(server + path));
+	response = EntityUtils.toString(resp.getEntity());
+	assertEquals("false", response);
+	
+	
+} catch (Exception e) {
+	e.printStackTrace();
+}
+}
+
+public void insertUserTest(){
+try {
+	
+	//DefaultHttpClient client = new DefaultHttpClient();
+		String nationalityIndex = myActivity.getNationalityIndex("Canadian");
+	path = "/insertuser/firstName/middleName/lastName/passportImage/passportNumber/email/mobileNumber/faceBookID/gender/"+nationalityIndex;
+			
+	HTTPManager.startHttpService(path, HTTP_REGISTER_USER, myActivity.getApplicationContext());
+	HttpResponse resp = client.execute(new HttpGet(server + path));
+	response = EntityUtils.toString(resp.getEntity());
+	assertEquals("Success", response);
+
+	
+	
+} catch (Exception e) {
+	e.printStackTrace();
+}
+}
 	
 }
