@@ -5,13 +5,17 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import models.Confirmation;
 import models.Flight;
 import models.Offer;
+import models.OfferHelper;
 import models.User;
 import play.mvc.Controller;
 import siena.Query;
@@ -428,59 +432,273 @@ public class Offers extends Controller {
 	 * @param facebookID The Facebook ID of the user in the database.
 	 * @author Hossam_Amer
 	 */
-	
-	public static void getMyOffers(String facebookID){
+public static void getMyOffers(String facebookID){
 		
 		User user = User.all(User.class).filter("facebookAccount", facebookID).fetch().get(0);
-		List <Offer> offersTemp = getAllOffersHalfConfirmedByMeNotDeclaredByMe(user);
 		List <Offer> offers = (List<Offer>) Offer.all(Offer.class).filter("user", user).fetch();
-		
-		offers.addAll(offersTemp);
-		
-		for (Offer offer: offers)
+		List<OfferHelper> offersHelper = new ArrayList<OfferHelper>();
+		List<Confirmation> confirmations1 = new ArrayList<Confirmation>();
+		List<Confirmation> confirmations2 = new ArrayList<Confirmation>();
+
+		try
 		{
-			offer.user.get();
-			offer.flight.get();
+			// Try to get his confirmations as offer owner. (Half Confirmed-Me-Declared)
+			 confirmations1 = (List<Confirmation>) Confirmation.all(Confirmation.class).filter("user1", user).fetch();
+			 
+			 if(confirmations1.isEmpty())
+			 {
+				// Try to get the Not-Confirmed
+					for(Offer offer: offers)
+					{
+						offer.get();offer.flight.get();offer.user.get();
+						
+						offersHelper.add(new OfferHelper(offer, null));	
+					}
+			 }
+			 else
+			 {
+				 for(Confirmation conf: confirmations1)
+				 {
+					 User userOther = null;
+					 conf.get();
+					 conf.offer.get();
+					 conf.user1.get();
+					 conf.offer.flight.get();
+					 
+					try
+					{
+						// Try to get his other side. (Confirmed-Me-Declared-Me)
+						conf.get();
+						conf.offer.get();
+						conf.offer.user.get();
+						conf.offer.flight.get();
+						
+							conf.user2.get();
+							userOther = conf.user2;
+						
+					}
+					catch (Exception e) {
+							
+						// (Half Confirmed-Me-Declared)
+					}
+					
+					conf.get(); conf.offer.get();conf.offer.flight.get();conf.offer.user.get();
+					
+					offersHelper.add(new OfferHelper(conf.offer, userOther));
+				 }
+			 }
+		}
+		catch (Exception e) {
+			
+			// Try to get the Not-Confirmed
+			for(Offer offer: offers)
+			{
+				offer.get();offer.flight.get();offer.user.get();
+				
+				offersHelper.add(new OfferHelper(offer, null));	
+			}
+
+		}
+		try
+		{
+			confirmations2 = (List<Confirmation>) Confirmation.all(Confirmation.class).filter("user2", user).fetch();
+			
+			// If I have some confirmations I participated as other
+			if(!confirmations2.isEmpty())
+			{
+				for(Confirmation conf: confirmations2)
+				{
+					// Get the offer owner of the confirmation (offer) + offer + its flight
+					conf.get(); conf.offer.get(); conf.offer.user.get(); conf.offer.flight.get();
+					
+					offersHelper.add(new OfferHelper(conf.offer, conf.offer.user));
+					
+				}
+			}
+		}
+		catch (Exception e) {
+
 		}
 		
-		renderJSON(offers);
+			renderJSON(offersHelper);
 	}
+//	public static void getMyOffers(String facebookID){
+//		
+//		User user = User.all(User.class).filter("facebookAccount", facebookID).fetch().get(0);
+//		List <Offer> offers = (List<Offer>) Offer.all(Offer.class).filter("user", user).fetch();
+//		List<OfferHelper> offersHelper = new ArrayList<OfferHelper>();
+//		
+//		//==================Method One========================================
+//		 // Create the list of confirmations
+//			List <Confirmation> confirmations = new ArrayList<Confirmation>();
+//			try
+//			{
+//				confirmations =  (List<Confirmation>) 
+//					Confirmation.all(Confirmation.class).fetch();
+//				
+//				for (Confirmation confirmation: confirmations)
+//				{
+//					try
+//					{
+//						confirmation.user2.get();
+//					
+//						// If I am not offer owner + I confirmed this offer	
+//						if(confirmation.user2.id.
+//								equals(user.id))
+//						{
+//							confirmation.offer.get();
+//							confirmation.offer.flight.get();
+//
+//							// Try to get the the offer owner of the offer
+//							confirmation.offer.user.get();
+//							
+//							OfferHelper offerHelper = new OfferHelper(confirmation.offer, confirmation.offer.user);
+//							offersHelper.add(offerHelper);
+//						}//end if
+//					}//end try
+//					catch (Exception e) {
+//						// TODO: handle exception
+//						continue;
+//					}// end catch	
+//				}// end for (Confirmation confirmation: confirmations)
+//			
+//			}
+//			catch (Exception e) {
+//				;
+//			}
+//			
+//			
+//			//==================Method Two====================================
+//			// Create the list of confirmations
+//			confirmations = new ArrayList<Confirmation>();
+// 
+//			try
+//			{
+//				// Try to get any confirmation
+//				confirmations =  (List<Confirmation>) 
+//					Confirmation.all(Confirmation.class).fetch();
+//			}
+//			catch (Exception e) {
+//				
+//				// If no confirmation > Offer is new > Not confirmed
+//				// Set the offerHelper with the offer and a null on the side
+//				for(Offer offer: offers)
+//				{
+//					offer.get();
+//					offer.user.get();
+//					offer.flight.get();
+//					offersHelper.add(new OfferHelper(offer, null));
+//					
+//					renderJSON(offersHelper);
+//					return;
+//				}
+//				
+//			}
+//			
+//			// Create the new list of the offersHelper
+//			
+//			for(Offer offer: offers)
+//			{
+//				for(Confirmation confirmation: confirmations)
+//				{
+//					OfferHelper offerHelper = null;
+//					// Try to find the other user in the confirmation
+//					// If he participates he should appear in the confirmation table
+//					try
+//					{
+//						// Try to get the offer id to prove participation
+//						confirmation.offer.get();
+//						
+//						// If the confirmation is related to this offer > add the other user
+//						if(offer.id == confirmation.offer.id)
+//						{
+//							// Get the other user to put it in the array list
+//							confirmation.user2.get();
+//							offer.get();
+//							offer.user.get();
+//							offer.flight.get();
+//							offerHelper = new OfferHelper(offer, confirmation.user2);
+//
+//							// add the new object
+//							offersHelper.add(offerHelper);
+//
+//							// Save the offerHelper to be easily retrieved later on
+////							offerHelper.save();
+//						}
+//					}
+//					catch (Exception e) {
+//						
+//						// if there is no confirmation > then no other user yet > add the offer with the default add
+//						offer.get();
+//						offer.user.get();
+//						offer.flight.get();
+//						offerHelper = new OfferHelper(offer, null);
+//
+//						// add the new object
+//						offersHelper.add(offerHelper);
+//						
+//						// Save the offerHelper to be easily retrieved later on
+////						offerHelper.save();
+//					}
+//					
+//					
+//				}//end inner loop
+//			}//end outer loop
+//			
+//			renderJSON(offersHelper);
+//	}
 	
 	/**
 	 * 
 	 * @param user User logged in on Sheel Ma3aya
-	 * @return Offers confirmed by me and declared by another user.
+	 * @return Offers half-confirmed by me and not declared by me and their corresponding offer owner.
 	 * @author Hossam_Amer
 	 */
 
-	private static List<Offer> 
+	private static List<OfferHelper> 
 	getAllOffersHalfConfirmedByMeNotDeclaredByMe (User user) 
 	{
 	
+		// Create the list of confirmations
 		List <Confirmation> confirmations = new ArrayList<Confirmation>();
 		try
 		{
+			// Try to get the list of confirmations 
 			confirmations =  (List<Confirmation>) 
 				Confirmation.all(Confirmation.class).fetch();
 		}
 		catch (Exception e) {
-			return new ArrayList<Offer>();
+			// If there are no confirmations, that means I did not participate yet.
+			return new ArrayList<OfferHelper>();
 		}
 		
-		List<Offer> offers = new ArrayList<Offer>(); 
+		// Create the new list of the offersHelper
+		List<OfferHelper> offersHelper = new ArrayList<OfferHelper>(); 
 		
 			for (Confirmation confirmation: confirmations)
 			{
 				try
 				{
+					// Since I confirmed, I should appear as a part of the confirmation
 					confirmation.user2.get();
 				
-						// If I am not offer owner + I confirmed this offer	
+					// If I am not offer owner + I confirmed this offer	
 					if(confirmation.user2.id.
 							equals(user.id))
 					{
 						confirmation.offer.get();
-						offers.add(confirmation.offer);
+						confirmation.offer.flight.get();
+
+						// Try to get the the offer owner of the offer
+						confirmation.offer.user.get();
+						
+						OfferHelper offerHelper = new OfferHelper(confirmation.offer, confirmation.offer.user);
+						
+						// Save the offerHelper to be easily retrieved later on
+//						offerHelper.save();
+						
+						
+						offersHelper.add(offerHelper);
 					}//end if
 				}//end try
 				catch (Exception e) {
@@ -489,48 +707,196 @@ public class Offers extends Controller {
 				}// end catch	
 			}// end for (Confirmation confirmation: confirmations)
 		
-		return offers;
+		return offersHelper;
 	}// end getAllOffersHalfConfirmedByMeNotDeclaredByMe
 	
 	
+	/**
+	 * 
+	 * @param user User logged in on Sheel Ma3aya
+	 * @param List<Offer> offersIDeclared All offers that user declared
+	 * @return Offers I am the offer owner in
+	 * @author Hossam_Amer
+	 */
+
+	private static List<OfferHelper> 
+	getAllOffersIAmOfferOwner (User user, List<Offer> offersIDeclared) 
+	{
+	
+		// Create the list of confirmations
+		List <Confirmation> confirmations = new ArrayList<Confirmation>();
+		List<OfferHelper> offersHelper = new ArrayList<OfferHelper>(); 
+		try
+		{
+			// Try to get any confirmation
+			confirmations =  (List<Confirmation>) 
+				Confirmation.all(Confirmation.class).fetch();
+		}
+		catch (Exception e) {
+			
+			// If no confirmation > Offer is new > Not confirmed
+			// Set the offerHelper with the offer and a null on the side
+			return getAllOffersNew(user, offersIDeclared);
+			
+		}
+		
+		// Create the new list of the offersHelper
+		
+		for(Offer offer: offersIDeclared)
+		{
+			for(Confirmation confirmation: confirmations)
+			{
+				OfferHelper offerHelper = null;
+				// Try to find the other user in the confirmation
+				// If he participates he should appear in the confirmation table
+				try
+				{
+					// Try to get the offer id to prove participation
+					confirmation.offer.get();
+					
+					// If the confirmation is related to this offer > add the other user
+					if(offer.id == confirmation.offer.id)
+					{
+						// Get the other user to put it in the array list
+						confirmation.user2.get();
+						offer.get();
+						offer.user.get();
+						offer.flight.get();
+						offerHelper = new OfferHelper(offer, confirmation.user2);
+
+						// Save the offerHelper to be easily retrieved later on
+//						offerHelper.save();
+					}
+				}
+				catch (Exception e) {
+					
+					// if there is no confirmation > then no other user yet > add the offer with the default add
+					offer.get();
+					offer.user.get();
+					offer.flight.get();
+					offerHelper = new OfferHelper(offer, null);
+					
+					// Save the offerHelper to be easily retrieved later on
+//					offerHelper.save();
+				}
+				
+				// add the new object
+				offersHelper.add(offerHelper);
+				
+			}//end inner loop
+		}//end outer loop
+		
+		
+		return offersHelper;
+	}// end getAllOffersIAmOfferOwner
+	
+//	public static void 
+//	test123 (String fb) 
+//	{
+//	
+//		User user = User.all(User.class).filter("facebookAccount", fb).fetch().get(0);
+//		List <Confirmation> confirmations = new ArrayList<Confirmation>();
+//		try
+//		{
+//			confirmations =  (List<Confirmation>) 
+//				Confirmation.all(Confirmation.class).fetch();
+//		}
+//		catch (Exception e) {
+//			renderJSON(new ArrayList<Offer>());
+//		}
+//		
+//		List<Offer> offers = new ArrayList<Offer>(); 
+//		
+//			for (Confirmation confirmation: confirmations)
+//			{
+//				try
+//				{
+//					confirmation.user2.get();
+//				
+//						// If I am not offer owner + I confirmed this offer	
+//					if(confirmation.user2.id.
+//							equals(user.id))
+//					{
+//						confirmation.offer.get();
+//						offers.add(confirmation.offer);
+//					}//end if
+//				}//end try
+//				catch (Exception e) {
+//					// TODO: handle exception
+//					continue;
+//				}// end catch	
+//			}// end for (Confirmation confirmation: confirmations)
+//		
+//		renderJSON(offers);
+//	}// end getAllOffersHalfConfirmedByMeNotDeclaredByMe
+	
+	
+	private static List<OfferHelper> getAllOffersNew(User user,
+			List<Offer> offersIDeclared) {
+		
+		List<OfferHelper> offersHelper = new ArrayList<OfferHelper>();
+		for(Offer offer: offersIDeclared)
+		{
+			offer.get();
+			offer.user.get();
+			offer.flight.get();
+			offersHelper.add(new OfferHelper(offer, null));
+		}
+		
+		return offersHelper;
+	}
+
 	public static void 
 	test123 (String fb) 
 	{
-	
+		// Find the user
 		User user = User.all(User.class).filter("facebookAccount", fb).fetch().get(0);
-		List <Confirmation> confirmations = new ArrayList<Confirmation>();
-		try
-		{
-			confirmations =  (List<Confirmation>) 
-				Confirmation.all(Confirmation.class).fetch();
-		}
-		catch (Exception e) {
-			renderJSON(new ArrayList<Offer>());
-		}
+		List <Offer> offers = (List<Offer>) Offer.all(Offer.class).filter("user", user).fetch();
 		
-		List<Offer> offers = new ArrayList<Offer>(); 
-		
-			for (Confirmation confirmation: confirmations)
-			{
-				try
-				{
-					confirmation.user2.get();
-				
-						// If I am not offer owner + I confirmed this offer	
-					if(confirmation.user2.id.
-							equals(user.id))
-					{
-						confirmation.offer.get();
-						offers.add(confirmation.offer);
-					}//end if
-				}//end try
-				catch (Exception e) {
-					// TODO: handle exception
-					continue;
-				}// end catch	
-			}// end for (Confirmation confirmation: confirmations)
-		
-		renderJSON(offers);
+		renderJSON(new OfferHelper(offers.get(0), user));
+//		 Create the list of confirmations
+//		List <Confirmation> confirmations = new ArrayList<Confirmation>();
+//		try
+//		{
+//			confirmations =  (List<Confirmation>) 
+//				Confirmation.all(Confirmation.class).fetch();
+//		}
+//		catch (Exception e) {
+//			renderJSON(new ArrayList<Offer>());
+//		}
+//		
+//		// Create the new list of the offersHelper
+//		List<OfferHelper> offersHelper = new ArrayList<OfferHelper>(); 
+//		
+//			for (Confirmation confirmation: confirmations)
+//			{
+//				try
+//				{
+//					confirmation.user2.get();
+//				
+//					// If I am not offer owner + I confirmed this offer	
+//					if(confirmation.user2.id.
+//							equals(user.id))
+//					{
+//						confirmation.offer.get();
+//						confirmation.offer.flight.get();
+//
+//						// Try to get the the offer owner of the offer
+//						confirmation.offer.user.get();
+//						
+//						OfferHelper offerHelper = new OfferHelper(confirmation.offer, confirmation.offer.user);
+//						offersHelper.add(offerHelper);
+//					}//end if
+//				}//end try
+//				catch (Exception e) {
+//					// TODO: handle exception
+//					continue;
+//				}// end catch	
+//			}// end for (Confirmation confirmation: confirmations)
+//		
+//		renderJSON(offersHelper);
 	}// end getAllOffersHalfConfirmedByMeNotDeclaredByMe
+	
+	
 	
 }//end class Offers

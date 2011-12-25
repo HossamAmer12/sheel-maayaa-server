@@ -167,7 +167,7 @@ public class Confirmations extends Controller {
 				user.confirmations1.fetch().add(confirmation);
 				
 				offer.get();
-				offer.offerStatus = "confirmed_1";
+				offer.offerStatus = "confirmed";
 				
 				offer.save();
 				confirmation.save();
@@ -205,7 +205,7 @@ public class Confirmations extends Controller {
 					user.confirmations2.fetch().add(confirmation);
 					
 					offer.get();
-					offer.offerStatus = "confirmed_2";
+					offer.offerStatus = "confirmed";
 					
 					offer.save();
 					confirmation.save();
