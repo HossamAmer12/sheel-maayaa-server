@@ -437,7 +437,8 @@ public class Offers extends Controller {
 	 * @param facebookID The Facebook ID of the user in the database.
 	 * @author Hossam_Amer
 	 */
-public static void getMyOffers(String facebookID){
+public static void getMyOffers(String facebookID)
+{
 		
 		User user = User.all(User.class).filter("facebookAccount", facebookID).fetch().get(0);
 		List <Offer> offers = (List<Offer>) Offer.all(Offer.class).filter("user", user).fetch();
@@ -445,93 +446,98 @@ public static void getMyOffers(String facebookID){
 		List<Confirmation> confirmations1 = new ArrayList<Confirmation>();
 		List<Confirmation> confirmations2 = new ArrayList<Confirmation>();
 		
+		List<Confirmation> confirmationsOfferID = new ArrayList<Confirmation>();
+		
 			// Try to get his confirmations as offer owner. (Half Confirmed-Me-Declared)
-			 confirmations1 = (List<Confirmation>) Confirmation.all(Confirmation.class).filter("user1", user).fetch();
-			 boolean hasConfirmation = false;
-			 if(confirmations1.isEmpty())
-			 {
-				// Try to get the Not-Confirmed
-					for(Offer offer: offers)
-					{
-						offer.get();offer.flight.get();offer.user.get();
-						
-						offersHelper.add(new OfferHelper(offer, null));	
-					}
-			 }
-			 else
-			 {
-				for(Offer offer: offers)
-				{
-					hasConfirmation = false;
-					 
-				 for(Confirmation conf: confirmations1)
-				 {
-					 User userOther = null;
-					 conf.get();
-					 conf.offer.get();
-					 conf.user1.get();
-					 conf.offer.flight.get();
-					 
-					try
-					{
-						// Try to get his other side. (Confirmed-Me-Declared-Me)
-						conf.get();
-						conf.offer.get();
-						conf.offer.user.get();
-						conf.offer.flight.get();
-						
-							conf.user2.get();
-							userOther = conf.user2;
-						
-					}
-					catch (Exception e) {
-							
-						// (Half Confirmed-Me-Declared)
-					}
-					
-					conf.get(); conf.offer.get();conf.offer.flight.get();conf.offer.user.get();
+			// This contains all offers the user participated as an offer owner in. (but probably that user did not confirm yet)
+			// Another case is that it might have another empty side
+			confirmations1 = (List<Confirmation>) Confirmation.all(Confirmation.class).filter("user1", user).fetch();
+		
+			boolean found = false;
+			// First we fetch the offers that the user declared 
+			// and try to get its right side.
+			for (Offer offer: offers)
+			{
+				// Every time the offer I iterate on is not intially found in the confirmation table
+				found = false;
 				
+				for (Confirmation conf: confirmations1)
+				{
+					conf.get(); conf.offer.get();
+					
+					// If the offer I currently searching for a confirmation is found
 					if(conf.offer.id == offer.id)
 					{
-							offersHelper.add(new OfferHelper(conf.offer, userOther));
-							hasConfirmation = true;
+						// I set the flag to true, that means that I found the record in the confirmation
+						found = true;
+						
+						//	I will try to get the right side.
+						// The case now is I am on the left side, and gamby fady or gamby full
+						try
+						{
+							// If I succeded to get my right side, then I can fetch the other user
+							conf.user2.get();
+							
+							// Then, I will get the offer with its user + flight
+							conf.offer.get(); conf.offer.flight.get(); conf.offer.user.get();
+							
+							OfferHelper offerHelper = new OfferHelper(conf.offer, conf.user2);
+							offersHelper.add(offerHelper);
+						}// end try
+						catch(Exception e)
+						{
+							// I failed to get my right side, then it is either I half-confirmed the offer, or it is new
+							
+							// Then, I will get the offer with its user + flight
+							conf.offer.get(); conf.offer.flight.get(); conf.offer.user.get();	
+							
+							OfferHelper offerHelper = new OfferHelper(conf.offer, null);
+							offersHelper.add(offerHelper);
+							
+						}// end catch
+							
+							// I found the record, no need to continue searching.
 							break;
-					}
-				 }//end inner loop
-				 
-				 if(!hasConfirmation)
-				 {
-					 offer.get();offer.flight.get();offer.user.get();
-					 offersHelper.add(new OfferHelper(offer, null)); 
-				 }
-				 
-			 }//end outer loop
-			}//end else
-		
-
-		try
-		{
-			confirmations2 = (List<Confirmation>) Confirmation.all(Confirmation.class).filter("user2", user).fetch();
+						
+					}//end if
+					
+				}// end inner loop
+				
+				// if i did not find the offer I have in the confirmation table, that means the offer is still new
+				if(!found)
+				{
+					// I will add it with a no right side.
+					// I will first fetch the offer I am looping on
+					offer.get(); offer.flight.get(); offer.user.get();
+					OfferHelper offerHelper = new OfferHelper(offer, null);
+					offersHelper.add(offerHelper);
+				}
+				
+			}// end outer loop
 			
-			// If I have some confirmations I participated as other
+		//========================
+		
+		// Will add the previously got offers, that offers I participated as other
+		confirmations2 = (List<Confirmation>) Confirmation.all(Confirmation.class).filter("user2", user).fetch();
 			if(!confirmations2.isEmpty())
 			{
 				for(Confirmation conf: confirmations2)
 				{
-					// Get the offer owner of the confirmation (offer) + offer + its flight
-					conf.get(); conf.offer.get(); conf.offer.user.get(); conf.offer.flight.get();
 					
-					offersHelper.add(new OfferHelper(conf.offer, conf.offer.user));
-					
-				}
-			}
-		}
-		catch (Exception e) {
+					// Will fetch the confirmation + its offer + flight's offer + offer owner
+					conf.get(); conf.offer.get(); conf.offer.flight.get(); conf.offer.user.get();
 
-		}
-		
+						// I will add it with a no right side.
+					OfferHelper offerHelper = new OfferHelper(conf.offer, conf.offer.user);
+					offersHelper.add(offerHelper);
+					
+				}// end loop
+			}// end	if(!confirmations2.isEmpty) 
+					
 			renderJSON(offersHelper);
-	}
+}//end method
+
+
 //	public static void getMyOffers(String facebookID){
 //		
 //		User user = User.all(User.class).filter("facebookAccount", facebookID).fetch().get(0);
