@@ -47,38 +47,43 @@ public class Offers extends Controller {
 		try{
 			BufferedReader br = new BufferedReader(new InputStreamReader(request.body));
 			input = br.readLine();
+			
+			
+			//	String jsonFlight = input.split("<>")[0];
+			//	String jsonOffer = input.split("<>")[1];
+				 
+				 
+				Gson gson = new Gson();
+				//Flight flightIn = gson.fromJson(jsonFlight, Flight.class);
+				Offer offerIn = gson.fromJson(input, Offer.class);
+			///	Flight flightDb = Flight.getByKey(Flight.class, flightIn.id);
+				Offer offerDb = Offer.getByKey(Offer.class,offerIn.id);
+				try{
+				offerDb.setOfferStatus(offerIn.getOfferStatus());
+				offerDb.setNoOfKilograms(offerIn.getNoOfKilograms());
+				offerDb.setPricePerKilogram(offerIn.getPricePerKilogram());
+				offerDb.setUserStatus(offerIn.getUserStatus());
+				offerDb.save();
+				
+		//		flightDb.setDepartureDate(flightIn.getDepartureDate());
+		//		flightDb.setDestination(flightIn.getDestination());
+		//		flightDb.setFlightNumber(flightIn.getFlightNumber());
+		//		flightDb.setSource(flightIn.getSource());
+		//		flightDb.save();
+				
+				
+				return "OK";
+				}
+				catch(Exception e){
+					return "Exception here y " +e.toString()+input+offerDb;
+				}
+			
 		}
 		catch(Exception e){
-			return e.toString();
+			return "Exception here z "+ e.toString()+input;
 		}
 		
-		try{
-		String jsonFlight = input.split("<>")[0];
-		String jsonOffer = input.split("<>")[1];
 		 
-		Gson gson = new Gson();
-		Flight flightIn = gson.fromJson(jsonFlight, Flight.class);
-		Offer offerIn = gson.fromJson(jsonOffer, Offer.class);
-		Flight flightDb = Flight.getByKey(Flight.class, flightIn.id);
-		Offer offerDb = Offer.getByKey(Offer.class,offerIn.id);
-		
-		offerDb.setOfferStatus(offerIn.getOfferStatus());
-		offerDb.setNoOfKilograms(offerIn.getNoOfKilograms());
-		offerDb.setPricePerKilogram(offerIn.getPricePerKilogram());
-		offerDb.setUserStatus(offerIn.getUserStatus());
-		offerDb.save();
-		
-		flightDb.setDepartureDate(flightIn.getDepartureDate());
-		flightDb.setDestination(flightIn.getDestination());
-		flightDb.setFlightNumber(flightIn.getFlightNumber());
-		flightDb.setSource(flightIn.getSource());
-		flightDb.save();
-		
-		return "OK";
-		}
-		catch(Exception e){
-			return e.toString();
-		}
 		
 		
 		
