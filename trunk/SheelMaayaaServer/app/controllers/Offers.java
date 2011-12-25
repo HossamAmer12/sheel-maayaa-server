@@ -94,21 +94,17 @@ public class Offers extends Controller {
 	 * @author mohsen
 	 * @changes offer status to 'deactivated' if applicable
 	 */
-	public static String deactivateOffer(String x){
+	public static String deactivateOffer(){
 		 
 		try{
 			BufferedReader br = new BufferedReader(new InputStreamReader(request.body));
 			String input = br.readLine();
 			long offerId = Integer.parseInt(input);
 			Offer offer = Offer.getByKey(Offer.class, offerId);
-			if(offer.offerStatus.equals("new")){
-				offer.setOfferStatus("deactivated");
-				offer.save();
-				return "OK";
-			}
-			else{
-				return "Cannot deactivate offer";
-			}
+			offer.setOfferStatus("deactivated");
+			offer.save();
+			return "OK";
+			
 		}catch(Exception e){
 			return e.toString();
 		}
