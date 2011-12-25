@@ -11,6 +11,7 @@ GET		/getuser1																							  Users.getUser1
 POST    /insertflight																						  Application.insertFlight
 POST	/deactivateoffer/{x}																						Offers.deactivateOffer
 POST	/editoffer																								Offers.editoffer
+POST	/editflight																								Offers.editFlight
 GET     /test																								  Application.test
 GET     /insertconfirmation/{facebookID}/{offerId}											  	  Confirmations.insertConfirmation
 GET     /sendsms																								  Confirmations.sendSMS
