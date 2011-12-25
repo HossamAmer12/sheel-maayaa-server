@@ -9,7 +9,7 @@ GET     /                                     				    										  	  Application
 POST    /insertnewoffer/{uid}																						  Offers.insertNewOffer
 GET		/getuser1																							  Users.getUser1
 POST    /insertflight																						  Application.insertFlight
-POST	/deactivateoffer																						Offers.deactivateOffer
+POST	/deactivateoffer/{x}																						Offers.deactivateOffer
 POST	/editoffer																								Offers.editoffer
 POST	/editflight/{oid}																								Flights.editFlight
 GET     /test																								  Application.test
