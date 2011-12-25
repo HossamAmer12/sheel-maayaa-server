@@ -439,12 +439,10 @@ public static void getMyOffers(String facebookID){
 		List<OfferHelper> offersHelper = new ArrayList<OfferHelper>();
 		List<Confirmation> confirmations1 = new ArrayList<Confirmation>();
 		List<Confirmation> confirmations2 = new ArrayList<Confirmation>();
-
-		try
-		{
+		
 			// Try to get his confirmations as offer owner. (Half Confirmed-Me-Declared)
 			 confirmations1 = (List<Confirmation>) Confirmation.all(Confirmation.class).filter("user1", user).fetch();
-			 
+			 boolean hasConfirmation = false;
 			 if(confirmations1.isEmpty())
 			 {
 				// Try to get the Not-Confirmed
@@ -457,6 +455,10 @@ public static void getMyOffers(String facebookID){
 			 }
 			 else
 			 {
+				for(Offer offer: offers)
+				{
+					hasConfirmation = false;
+					 
 				 for(Confirmation conf: confirmations1)
 				 {
 					 User userOther = null;
@@ -483,22 +485,25 @@ public static void getMyOffers(String facebookID){
 					}
 					
 					conf.get(); conf.offer.get();conf.offer.flight.get();conf.offer.user.get();
-					
-					offersHelper.add(new OfferHelper(conf.offer, userOther));
-				 }
-			 }
-		}
-		catch (Exception e) {
-			
-			// Try to get the Not-Confirmed
-			for(Offer offer: offers)
-			{
-				offer.get();offer.flight.get();offer.user.get();
 				
-				offersHelper.add(new OfferHelper(offer, null));	
-			}
+					if(conf.offer.id == offer.id)
+					{
+							offersHelper.add(new OfferHelper(conf.offer, userOther));
+							hasConfirmation = true;
+							break;
+					}
+				 }//end inner loop
+				 
+				 if(!hasConfirmation)
+				 {
+					 offer.get();offer.flight.get();offer.user.get();
+					 offersHelper.add(new OfferHelper(offer, null)); 
+				 }
+				 
+			 }//end outer loop
+			}//end else
+		
 
-		}
 		try
 		{
 			confirmations2 = (List<Confirmation>) Confirmation.all(Confirmation.class).filter("user2", user).fetch();
