@@ -39,9 +39,16 @@ public class Flights extends Controller {
 	 * @Author mohsen
 	 * Gets as an input the offer's flight data and  edits them in the database.
 	 */
-	public static String editFlight(){
+	public static String editFlight(long oid){
+		
+		
+		
 		String input = "";
 		try{
+			
+			Offer offer = Offer.getByKey(Offer.class, oid);
+			
+			
 			BufferedReader br = new BufferedReader(new InputStreamReader(request.body));
 			input = br.readLine();
 			
@@ -49,7 +56,7 @@ public class Flights extends Controller {
 				Gson gson = new Gson();
 				Flight flightIn = gson.fromJson(input, Flight.class);
 			
-			    Flight flightDb = Flight.getByKey(Flight.class, flightIn.id);
+			    Flight flightDb = offer.flight;
 				
 				try{
 
