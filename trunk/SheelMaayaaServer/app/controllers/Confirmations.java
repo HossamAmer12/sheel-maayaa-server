@@ -178,6 +178,7 @@ public class Confirmations extends Controller {
 				confirmation.user1.get();
 				confirmation.user2.get();
 				confirmation.offer.get();
+				confirmation.offer.user.get();
 				confirmation.offer.flight.get();		
 				
 				renderJSON(confirmation);
@@ -215,6 +216,8 @@ public class Confirmations extends Controller {
 					confirmation.user1.get();
 					confirmation.user2.get();
 					confirmation.offer.get();
+					confirmation.offer.flight.get();
+					confirmation.offer.user.get();
 							
 					renderJSON(confirmation);
 
@@ -257,6 +260,7 @@ public class Confirmations extends Controller {
 			//Get everything about the confirmation
 			confirmation.offer.get();
 			confirmation.offer.flight.get();
+			confirmation.offer.user.get();
 			
 			renderJSON(confirmation);
 			
