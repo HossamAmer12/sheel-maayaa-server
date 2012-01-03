@@ -236,8 +236,10 @@ public class Confirmations extends Controller {
 			//00
 						
 			Confirmation confirmation;
+			user.get();
+			offerOwner.get();
 			
-		if(offerOwner.id == user.id)	
+		if(offerOwner.id.equals(user.id))	
 			{
 				offer.get();
 				offer.offerStatus = half_confirmed_offerOwner;
