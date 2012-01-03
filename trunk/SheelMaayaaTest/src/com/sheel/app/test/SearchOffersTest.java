@@ -34,44 +34,44 @@ public class SearchOffersTest extends
 		try {
 			
 			///////////////////////// searching extra weight offers ////////////////////////////
-			String request =  "/filterflightnumberoffers/LH123/12-25-2011/1/0/0/both/none";
+			String request =  "/filterflightnumberoffers/LH123/1-31-2011/1/0/0/both/none";
 			DefaultHttpClient client = new DefaultHttpClient();
 			
 			HttpResponse resp = client.execute(new HttpGet(server + request));
 			String response = EntityUtils.toString(resp.getEntity());
 			JSONArray jsonArray = new JSONArray(response);
-			assertEquals(3, jsonArray.length());
+			assertEquals(6, jsonArray.length());
 			
 			///////////////////////// searching less weight offers ////////////////////////////
-			request =  "/filterflightnumberoffers/LH123/12-25-2011/0/0/0/both/none";
+			request =  "/filterflightnumberoffers/LH123/1-31-2011/0/0/0/both/none";
 			resp = client.execute(new HttpGet(server + request));
 			response = EntityUtils.toString(resp.getEntity());
 			jsonArray = new JSONArray(response);
 			assertEquals(1, jsonArray.length());
 			
 			///////////////////////// filtering offers with weight ////////////////////////////
-			request =  "/filterflightnumberoffers/LH123/12-25-2011/1/8/0/both/none";
+			request =  "/filterflightnumberoffers/LH123/1-31-2011/1/8/0/both/none";
 			resp = client.execute(new HttpGet(server + request));
 			response = EntityUtils.toString(resp.getEntity());
 			jsonArray = new JSONArray(response);
-			assertEquals(2, jsonArray.length());
+			assertEquals(3, jsonArray.length());
 			
 			///////////////////////// filtering offers with weight and price////////////////////////////
-			request =  "/filterflightnumberoffers/LH123/12-25-2011/1/8/5/both/none";
+			request =  "/filterflightnumberoffers/LH123/1-31-2011/1/8/5/both/none";
 			resp = client.execute(new HttpGet(server + request));
 			response = EntityUtils.toString(resp.getEntity());
 			jsonArray = new JSONArray(response);
 			assertEquals(2, jsonArray.length());
 			
 			///////////////////////// filtering offers with weigh, price and gender ////////////////////////////
-			request =  "/filterflightnumberoffers/LH123/12-25-2011/1/8/5/male/none";
+			request =  "/filterflightnumberoffers/LH123/1-31-2011/1/8/5/male/none";
 			resp = client.execute(new HttpGet(server + request));
 			response = EntityUtils.toString(resp.getEntity());
 			jsonArray = new JSONArray(response);
 			assertEquals(1, jsonArray.length());
 			
 			///////////////////////// filtering offers with weight, price, gender and nationality ///////////////////////////
-			request =  "/filterflightnumberoffers/LH123/12-25-2011/1/8/5/male/78";
+			request =  "/filterflightnumberoffers/LH123/1-31-2011/1/8/5/male/78";
 			resp = client.execute(new HttpGet(server + request));
 			response = EntityUtils.toString(resp.getEntity());
 			jsonArray = new JSONArray(response);
@@ -87,44 +87,44 @@ public class SearchOffersTest extends
 		try {
 			
 			///////////////////////// searching extra weight offers ////////////////////////////
-			String request =  "/filterairportsoffers/78/287/12-25-2011/1/0/0/both/none";
+			String request =  "/filterairportsoffers/78/287/1-31-2011/1/0/0/both/none";
 			DefaultHttpClient client = new DefaultHttpClient();
 			
 			HttpResponse resp = client.execute(new HttpGet(server + request));
 			String response = EntityUtils.toString(resp.getEntity());
 			JSONArray jsonArray = new JSONArray(response);
-			assertEquals(3, jsonArray.length());
+			assertEquals(6, jsonArray.length());
 			
 			///////////////////////// searching less weight offers ////////////////////////////
-			request =  "/filterairportsoffers/78/287/12-25-2011/0/0/0/both/none";
+			request =  "/filterairportsoffers/78/287/1-31-2011/0/0/0/both/none";
 			resp = client.execute(new HttpGet(server + request));
 			response = EntityUtils.toString(resp.getEntity());
 			jsonArray = new JSONArray(response);
 			assertEquals(1, jsonArray.length());
 			
 			///////////////////////// filtering offers with weight ///////////////////////////
-			request =  "/filterairportsoffers/78/287/12-25-2011/1/8/0/both/none";
+			request =  "/filterairportsoffers/78/287/1-31-2011/1/8/0/both/none";
 			resp = client.execute(new HttpGet(server + request));
 			response = EntityUtils.toString(resp.getEntity());
 			jsonArray = new JSONArray(response);
-			assertEquals(2, jsonArray.length());
+			assertEquals(3, jsonArray.length());
 			
 			///////////////////////// filtering offers with weight and price ///////////////////////////
-			request =  "/filterairportsoffers/78/287/12-25-2011/1/8/5/both/none";
+			request =  "/filterairportsoffers/78/287/1-31-2011/1/8/5/both/none";
 			resp = client.execute(new HttpGet(server + request));
 			response = EntityUtils.toString(resp.getEntity());
 			jsonArray = new JSONArray(response);
 			assertEquals(2, jsonArray.length());
 			
 			///////////////////////// filtering offers with weight, price and gender///////////////////////////
-			request =  "/filterairportsoffers/78/287/12-25-2011/1/8/5/male/none";
+			request =  "/filterairportsoffers/78/287/1-31-2011/1/8/5/male/none";
 			resp = client.execute(new HttpGet(server + request));
 			response = EntityUtils.toString(resp.getEntity());
 			jsonArray = new JSONArray(response);
 			assertEquals(1, jsonArray.length());
 			
 			///////////////////////// filtering offers with weight, price, gender and nationality ///////////////////////////
-			request =  "/filterairportsoffers/78/287/12-25-2011/1/8/5/male/78";
+			request =  "/filterairportsoffers/78/287/1-31-2011/1/8/5/male/78";
 			resp = client.execute(new HttpGet(server + request));
 			response = EntityUtils.toString(resp.getEntity());
 			jsonArray = new JSONArray(response);
